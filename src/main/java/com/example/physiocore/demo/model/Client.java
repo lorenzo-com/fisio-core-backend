@@ -37,9 +37,9 @@ import jakarta.persistence.InheritanceType;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Client implements UserDetails {
-    @Id
+	@Id
 	@GeneratedValue
 	private Long id;
 	private String name;
@@ -51,11 +51,11 @@ public class Client implements UserDetails {
 	private String phone;
 	private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	private Set<UserRole> roles = new java.util.HashSet<>();
 
-    @Override
+	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return roles
 				.stream()

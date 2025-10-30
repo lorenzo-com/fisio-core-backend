@@ -22,6 +22,7 @@ import com.example.physiocore.demo.dto.converter.RegisterDto;
 import com.example.physiocore.demo.dto.converter.UserDtoConverter;
 import com.example.physiocore.demo.model.Client;
 import com.example.physiocore.demo.model.UserRole;
+import com.example.physiocore.demo.repository.AppoinmentRepository;
 import com.example.physiocore.demo.security.jwt.JwtProvider;
 import com.example.physiocore.demo.security.jwt.model.JwtUserResponse;
 import com.example.physiocore.demo.security.jwt.model.LoginRequest;
@@ -39,6 +40,7 @@ public class AuthenticationController {
 	private final UserDtoConverter converter;
 
 	private final ClientService clientService;
+	private final AppoinmentRepository appointmentRepository;
 	private final UserDtoConverter userDtoConverter;
 
 	@PostMapping("/login")
@@ -89,6 +91,8 @@ public class AuthenticationController {
 
 	@GetMapping("/user/me")
 	public GetUserDto me(@AuthenticationPrincipal Client user) {
+		Long numAppoinments = appointmentRepository.countByPatientId(user.getId());
+		// TODO: Usar numAppoinments de alguna manera
 		return converter.convertUserEntityToGetUserDto(user);
 	}
 
