@@ -1,5 +1,6 @@
 package com.example.physiocore.demo.controller;
 
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -80,8 +81,10 @@ public class AuthenticationController {
 
 		Client client = userDtoConverter.convertRegisterDtoToClient(newUser);
 
+		userDtoConverter.convertUserEntityToGetUserDto(clientService.save(client));
+
 		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(userDtoConverter.convertUserEntityToGetUserDto(clientService.save(client)));
+			.body(Map.of("message", "The user has registered successfully."));
 	}
 
 	@GetMapping("/user/me")

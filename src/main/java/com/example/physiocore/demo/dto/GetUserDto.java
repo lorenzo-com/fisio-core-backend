@@ -1,5 +1,6 @@
 package com.example.physiocore.demo.dto;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -15,5 +16,8 @@ public class GetUserDto {
 	private String name;
 	private String surname;
 	private String username;
+	private String phone;
+	private String address;
+	private LocalDate birthDate;
 	private Set<String> roles;
 }

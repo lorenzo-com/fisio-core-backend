@@ -13,6 +13,9 @@ public class UserDtoConverter {
     public GetUserDto convertUserEntityToGetUserDto(Client user) {
 		return GetUserDto.builder()
 				.id(user.getId())
+				.phone(user.getPhone())
+				.birthDate(user.getBirthDate())
+				.address(user.getAddress())
 				.username(user.getUsername())
 				.name(user.getName())
 				.surname(user.getSurname())
@@ -27,9 +30,11 @@ public class UserDtoConverter {
 		Client client = new Client();
 		client.setName(dto.getName());
 		client.setSurname(dto.getSurname());
+		client.setBirthDate(dto.getBirthDate());
+		client.setAddress(dto.getAddress());
 		client.setUsername(dto.getUsername());
-		client.setPassword(dto.getPassword());
 		client.setPhone(dto.getPhone());
+		client.setPassword(dto.getPassword());
 		client.getRoles().add(UserRole.PATIENT); // Default role for new users
 
 		return client;

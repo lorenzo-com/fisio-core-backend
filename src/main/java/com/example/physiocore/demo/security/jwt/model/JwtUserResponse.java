@@ -1,5 +1,6 @@
 package com.example.physiocore.demo.security.jwt.model;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import com.example.physiocore.demo.dto.GetUserDto;
@@ -17,8 +18,8 @@ public class JwtUserResponse extends GetUserDto {
 	private String token;
 	
 	@Builder(builderMethodName="jwtUserResponseBuilder")
-	public JwtUserResponse(Long id, String username, String name, String surname, Set<String> roles, String token) {
-		super(id, username, name, surname, roles);
+	public JwtUserResponse(Long id, String name, String surname, String username, String phone, String address, LocalDate birthDate, Set<String> roles, String token) {
+		super(id, phone, birthDate, address, username, name, surname, roles);
 		this.token = token;
 	}
 }

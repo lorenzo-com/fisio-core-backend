@@ -1,5 +1,6 @@
 package com.example.physiocore.demo.model;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,6 +44,8 @@ public class Client implements UserDetails {
 	private Long id;
 	private String name;
 	private String surname;
+	private LocalDate birthDate;
+	private String address;
 	@Column(unique = true)
 	private String username;
 	private String phone;
