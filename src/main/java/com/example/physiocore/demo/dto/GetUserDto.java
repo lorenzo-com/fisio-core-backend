@@ -13,11 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor @Builder
 public class GetUserDto {
 	private Long id;
-	private String name;
-	private String surname;
-	private String username;
 	private String phone;
-	private String address;
 	private LocalDate birthDate;
+	private String address;
+	private String surname;
+	private String name;
+	private String username;
 	private Set<String> roles;
 }
