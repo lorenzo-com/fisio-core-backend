@@ -2,12 +2,12 @@ package com.example.physiocore.demo.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.physiocore.demo.dto.ClientDto;
+import com.example.physiocore.demo.dto.NewReservationDto;
 import com.example.physiocore.demo.model.Client;
 import com.example.physiocore.demo.repository.ClientRepository;
 
@@ -22,6 +22,17 @@ public class ClientService {
 
     public Optional<Client> findByUsername(String username) {
         return clientRepository.findByUsername(username);
+    }
+
+    public Optional<NewReservationDto> getClientById(Long id) {
+        return clientRepository.findById(id)
+        .map(client -> NewReservationDto.builder()
+            .name(client.getName())
+            .surname(client.getSurname())
+            .username(client.getUsername())
+            .phone(client.getPhone())
+            .build()
+        );
     }
 
     public List<ClientDto> getAllClients() {
