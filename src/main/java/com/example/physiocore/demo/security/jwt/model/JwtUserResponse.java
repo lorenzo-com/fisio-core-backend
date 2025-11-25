@@ -18,8 +18,8 @@ public class JwtUserResponse extends GetUserDto {
 	private String token;
 	
 	@Builder(builderMethodName="jwtUserResponseBuilder")
-	public JwtUserResponse(Long id, String name, String surname, String username, String phone, String address, LocalDate birthDate, Set<String> roles, String token) {
-		super(id, phone, birthDate, address, username, name, surname, roles);
+	public JwtUserResponse(Long id, String dni, String phone, LocalDate birthDate, String address, String surname, String name, String username, Set<String> roles, Long numAppointments, String token) {
+		super(id, dni, phone, birthDate, address, username, name, surname, roles, numAppointments);
 		this.token = token;
 	}
 }

@@ -92,8 +92,7 @@ public class AuthenticationController {
 	@GetMapping("/user/me")
 	public GetUserDto me(@AuthenticationPrincipal Client user) {
 		Long numAppoinments = appointmentRepository.countByPatientId(user.getId());
-		// TODO: Usar numAppoinments de alguna manera
-		return converter.convertUserEntityToGetUserDto(user);
+		return converter.convertUserEntityToGetUserDto(user, numAppoinments);
 	}
 
 	@GetMapping("/isAuthenticated")

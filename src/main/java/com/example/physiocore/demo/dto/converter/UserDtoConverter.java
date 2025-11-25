@@ -10,6 +10,24 @@ import com.example.physiocore.demo.model.UserRole;
 
 @Component
 public class UserDtoConverter {
+	public GetUserDto convertUserEntityToGetUserDto(Client user, Long numAppoinments) {
+		return GetUserDto.builder()
+				.id(user.getId())
+				.dni(user.getDni())
+				.phone(user.getPhone())
+				.birthDate(user.getBirthDate())
+				.address(user.getAddress())
+				.username(user.getUsername())
+				.name(user.getName())
+				.surname(user.getSurname())
+				.numAppointments(numAppoinments)
+				.roles(user.getRoles().stream()
+							.map(UserRole::name)
+							.collect(Collectors.toSet())
+				)
+				.build();
+	}
+
     public GetUserDto convertUserEntityToGetUserDto(Client user) {
 		return GetUserDto.builder()
 				.id(user.getId())

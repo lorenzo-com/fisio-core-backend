@@ -49,6 +49,7 @@ public class JwtProvider {
 				.issuedAt(new Date())
 				.expiration(tokenExpirationDate)
 				.claim("id", principal.getId())
+				.claim("dni", principal.getDni())
 				.claim("name", principal.getName())
 				.claim("surname", principal.getSurname())
 				// Esto develve los roles en String. Ejemplo [ADMIN, USER] --> "ADMIN, USER"

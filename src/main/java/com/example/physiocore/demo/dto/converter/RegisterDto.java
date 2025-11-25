@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class RegisterDto {
+	private String dni;
 	private String name;
 	private String surname;
 	private LocalDate birthDate;

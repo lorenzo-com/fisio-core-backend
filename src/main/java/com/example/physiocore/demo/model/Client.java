@@ -42,6 +42,7 @@ public class Client implements UserDetails {
 	@Id
 	@GeneratedValue
 	private Long id;
+	private String dni;
 	private String name;
 	private String surname;
 	private LocalDate birthDate;
