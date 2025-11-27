@@ -1,9 +1,13 @@
 package com.example.physiocore.demo.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.physiocore.demo.dto.AppointmentRequest;
+import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.Appointment;
 import com.example.physiocore.demo.model.Client;
 import com.example.physiocore.demo.repository.AppoinmentRepository;
@@ -27,5 +31,21 @@ public class AppoinmentService {
         appointment.setPatient(patient);
 
         return appointmentRepository.save(appointment);
+    }
+
+    public List<AppointmentResponse> getAllAppointments() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+
+        return appointments.stream().map(data -> {
+            return AppointmentResponse.builder()
+                .name(data.getPatient().getName())
+                .surname(data.getPatient().getSurname())
+                .phone(data.getPatient().getPhone())
+                .patientId(data.getPatient().getId())
+                .date(data.getDate())
+                .hour(data.getHourValue())
+                .state(data.getState().toString())
+                .build();
+        }).collect(Collectors.toList());
     }
 }
