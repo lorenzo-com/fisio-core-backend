@@ -1,11 +1,10 @@
 package com.example.physiocore.demo.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -17,19 +16,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Appoinment {
+public class Appointment {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double price;
-    private String notes;
-    private LocalDateTime dateHour;
-    private String appliedTreatments;
+    private String date;
+    private String hourValue;
+    private String service;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Client patient;
 
     @Enumerated(EnumType.STRING)
-    private StatusAppointment state;
+    private StatusAppointment state = StatusAppointment.PENDIENTE;
 }
