@@ -38,14 +38,18 @@ public class AppoinmentService {
 
         return appointments.stream().map(data -> {
             return AppointmentResponse.builder()
+                .id(data.getId())
                 .name(data.getPatient().getName())
                 .surname(data.getPatient().getSurname())
                 .phone(data.getPatient().getPhone())
-                .patientId(data.getPatient().getId())
                 .date(data.getDate())
                 .hour(data.getHourValue())
                 .state(data.getState().toString())
                 .build();
         }).collect(Collectors.toList());
+    }
+
+    public void deleteAppointment(Long id) {
+        appointmentRepository.deleteById(id);
     }
 }
