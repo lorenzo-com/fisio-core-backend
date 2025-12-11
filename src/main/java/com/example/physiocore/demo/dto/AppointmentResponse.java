@@ -1,5 +1,7 @@
 package com.example.physiocore.demo.dto;
 
+import com.example.physiocore.demo.model.StatusAppointment;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,10 +17,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AppointmentResponse {
     private Long id;
+
+    // IMPORTANTE: Angular necesita esto para this.reservationForm.patchValue({ patient_id: ... })
+    private Long patientId;
+
     private String name;
     private String surname;
+    private String username;
     private String phone;
     private String date;
     private String hour;
-    private String state;
+    private String service;
+    private StatusAppointment state;
 }

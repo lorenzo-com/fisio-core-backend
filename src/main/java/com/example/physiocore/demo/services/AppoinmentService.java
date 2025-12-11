@@ -33,6 +33,49 @@ public class AppoinmentService {
         return appointmentRepository.save(appointment);
     }
 
+    public AppointmentResponse updateAppointment(Long id, AppointmentRequest data) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cita no encontrada con ID: " + id));
+
+        appointment.setDate(data.getDate());
+        appointment.setHourValue(data.getHour());
+        appointment.setService(data.getService());
+        appointment.setState(data.getState());
+
+        Appointment updatedAppointment = appointmentRepository.save(appointment);
+
+        return AppointmentResponse.builder()
+                .id(updatedAppointment.getId())
+                .patientId(updatedAppointment.getPatient().getId())
+                .username(updatedAppointment.getPatient().getUsername())
+                .name(updatedAppointment.getPatient().getName())
+                .surname(updatedAppointment.getPatient().getSurname())
+                .phone(updatedAppointment.getPatient().getPhone())
+                .date(updatedAppointment.getDate())
+                .hour(updatedAppointment.getHourValue())
+                .service(updatedAppointment.getService())
+                .state(updatedAppointment.getState())
+                .build();
+    }
+
+    public AppointmentResponse getAppointmentById(Long id) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cita no encontrada con ID: " + id));
+
+        return AppointmentResponse.builder()
+                .id(appointment.getId())
+                .patientId(appointment.getPatient().getId())
+                .username(appointment.getPatient().getUsername())
+                .name(appointment.getPatient().getName())
+                .surname(appointment.getPatient().getSurname())
+                .phone(appointment.getPatient().getPhone())
+                .date(appointment.getDate())
+                .hour(appointment.getHourValue())
+                .service(appointment.getService())
+                .state(appointment.getState())
+                .build();
+    }
+
     public List<AppointmentResponse> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
 
@@ -44,7 +87,7 @@ public class AppoinmentService {
                 .phone(data.getPatient().getPhone())
                 .date(data.getDate())
                 .hour(data.getHourValue())
-                .state(data.getState().toString())
+                .state(data.getState())
                 .build();
         }).collect(Collectors.toList());
     }

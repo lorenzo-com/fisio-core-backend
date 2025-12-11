@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -36,6 +38,18 @@ public class AppointmentController {
     public ResponseEntity<?> createAppoinment(@RequestBody AppointmentRequest request) {
         Appointment newAppointment = appoinmentService.createAppointment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(newAppointment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequest data) {
+        AppointmentResponse updatedAppointment = appoinmentService.updateAppointment(id, data);
+        return ResponseEntity.ok(updatedAppointment);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAppointmentById(@PathVariable Long id) {
+        AppointmentResponse appointment = appoinmentService.getAppointmentById(id);
+        return ResponseEntity.ok(appointment);
     }
 
     @DeleteMapping("/delete/{id}")
