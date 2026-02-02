@@ -86,7 +86,7 @@ public class AuthenticationController {
 		userDtoConverter.convertUserEntityToGetUserDto(clientService.save(client));
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(Map.of("message", "The user has registered successfully."));
+				.body(Map.of("message", "The user has registered successfully."));
 	}
 
 	@GetMapping("/user/me")
