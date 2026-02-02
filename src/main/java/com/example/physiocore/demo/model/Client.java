@@ -29,6 +29,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import jakarta.persistence.InheritanceType;
 
+// TODO: Crear modelo de admin/usuarios
 @Entity
 @Getter
 @Setter
