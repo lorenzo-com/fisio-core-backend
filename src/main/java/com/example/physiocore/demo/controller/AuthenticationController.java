@@ -76,7 +76,6 @@ public class AuthenticationController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> newUser(@RequestBody RegisterDto newUser) {
-		System.out.println("Registering new user: " + newUser.getUsername());
 		if (clientService.findByUsername(newUser.getUsername()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("EMAIL ALREADY EXISTS");
 		}

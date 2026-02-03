@@ -34,6 +34,7 @@ public class UserDtoConverter {
 				.phone(user.getPhone())
 				.birthDate(user.getBirthDate())
 				.address(user.getAddress())
+				.dni(user.getDni())
 				.username(user.getUsername())
 				.name(user.getName())
 				.surname(user.getSurname())
@@ -52,6 +53,7 @@ public class UserDtoConverter {
 		client.setAddress(dto.getAddress());
 		client.setUsername(dto.getUsername());
 		client.setPhone(dto.getPhone());
+		client.setDni(dto.getDni());
 		client.setPassword(dto.getPassword());
 		client.getRoles().add(UserRole.PATIENT); // Default role for new users
 
