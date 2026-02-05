@@ -23,6 +23,7 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
+            // Creamos Admin
             AppUser admin = new AppUser();
             admin.setDni("X00000");
             admin.setName("Alex");
@@ -34,9 +35,22 @@ public class DataSeeder implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("123456"));
             admin.setActive(true);
             admin.setRoles(Set.of(UserRole.ADMIN));
-            
+
+            // Creamos un cliente de ejemplo
+            AppUser client = new AppUser();
+            client.setDni("Y00000");
+            client.setName("John");
+            client.setSurname("Doe");
+            client.setBirthDate(java.time.LocalDate.now());
+            client.setAddress("C/ John 1");
+            client.setUsername("john@client.com");
+            client.setPhone("987654321");
+            client.setPassword(passwordEncoder.encode("123456"));
+            client.setRoles(Set.of(UserRole.PATIENT));
+
             userRepository.save(admin);
-            System.out.println("Usuario inicial creado con éxito.");
+            userRepository.save(client);
+            System.out.println("Usuarios iniciales creados con éxito.");
         }
     }
 }
