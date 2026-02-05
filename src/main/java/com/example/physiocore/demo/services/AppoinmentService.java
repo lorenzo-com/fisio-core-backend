@@ -9,19 +9,19 @@ import org.springframework.stereotype.Service;
 import com.example.physiocore.demo.dto.AppointmentRequest;
 import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.Appointment;
-import com.example.physiocore.demo.model.Client;
+import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.repository.AppoinmentRepository;
-import com.example.physiocore.demo.repository.ClientRepository;
+import com.example.physiocore.demo.repository.UserRepository;
 
 @Service
 public class AppoinmentService {
     @Autowired
     private AppoinmentRepository appointmentRepository;
     @Autowired
-    private ClientRepository clientRepository;
+    private UserRepository clientRepository;
 
     public Appointment createAppointment(AppointmentRequest request) {
-        Client patient = clientRepository.findById(request.getPatient_id())
+        AppUser patient = clientRepository.findById(request.getPatient_id())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + request.getPatient_id()));
 
         Appointment appointment = new Appointment();

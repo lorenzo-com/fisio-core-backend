@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.physiocore.demo.dto.GetUserDto;
 import com.example.physiocore.demo.dto.converter.RegisterDto;
 import com.example.physiocore.demo.dto.converter.UserDtoConverter;
-import com.example.physiocore.demo.model.Client;
+import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.repository.AppoinmentRepository;
 import com.example.physiocore.demo.security.jwt.JwtProvider;
 import com.example.physiocore.demo.security.jwt.model.JwtUserResponse;
 import com.example.physiocore.demo.security.jwt.model.LoginRequest;
-import com.example.physiocore.demo.services.ClientService;
+import com.example.physiocore.demo.services.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class AuthenticationController {
 	private final JwtProvider tokenProvider;
 	private final UserDtoConverter converter;
 
-	private final ClientService clientService;
+	private final UserService clientService;
 	private final AppoinmentRepository appointmentRepository;
 	private final UserDtoConverter userDtoConverter;
 
@@ -52,7 +52,7 @@ public class AuthenticationController {
 
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-			Client principal = (Client) authentication.getPrincipal();
+			AppUser principal = (AppUser) authentication.getPrincipal();
 
 			String jwtToken = tokenProvider.generateToken(authentication);
 
@@ -66,36 +66,35 @@ public class AuthenticationController {
 		}
 	}
 
-	private JwtUserResponse convertUserEntityAndTokenToJwtUserResponse(Client user, String jwtToken) {
+	private JwtUserResponse convertUserEntityAndTokenToJwtUserResponse(AppUser user, String jwtToken) {
 		return JwtUserResponse.jwtUserResponseBuilder()
-				.username(user.getUsername())
 				.roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet()))
 				.token(jwtToken)
 				.build();
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<?> newUser(@RequestBody RegisterDto newUser) {
-		if (clientService.findByUsername(newUser.getUsername()).isPresent()) {
+	public ResponseEntity<?> newClient(@RequestBody RegisterDto newClient) {
+		if (clientService.findByUsername(newClient.getUsername()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("EMAIL ALREADY EXISTS");
 		}
 
-		Client client = userDtoConverter.convertRegisterDtoToClient(newUser);
+		AppUser client = userDtoConverter.convertRegisterDtoToUser(newClient, UserRole.PATIENT);
 
-		userDtoConverter.convertUserEntityToGetUserDto(clientService.save(client));
+		userDtoConverter.convertUserEntityToGetUserDto(clientService.saveUser(client));
 
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(Map.of("message", "The user has registered successfully."));
 	}
 
 	@GetMapping("/user/me")
-	public GetUserDto me(@AuthenticationPrincipal Client user) {
+	public GetUserDto me(@AuthenticationPrincipal AppUser user) {
 		Long numAppoinments = appointmentRepository.countByPatientId(user.getId());
 		return converter.convertUserEntityToGetUserDto(user, numAppoinments);
 	}
 
 	@GetMapping("/isAuthenticated")
-	public ResponseEntity<Boolean> isAuthenticated(@AuthenticationPrincipal Client user) {
+	public ResponseEntity<Boolean> isAuthenticated(@AuthenticationPrincipal AppUser user) {
 		return ResponseEntity.ok(user != null);
 	}
 }

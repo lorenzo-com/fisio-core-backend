@@ -3,25 +3,27 @@ package com.example.physiocore.demo.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.physiocore.demo.dto.ClientDto;
-import com.example.physiocore.demo.dto.ClientUpdateDTO;
-import com.example.physiocore.demo.model.Client;
-import com.example.physiocore.demo.repository.ClientRepository;
+import com.example.physiocore.demo.dto.UserDto;
+import com.example.physiocore.demo.dto.UserUpdateDTO;
+import com.example.physiocore.demo.model.AppUser;
+import com.example.physiocore.demo.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ClientService {
-    private final ClientRepository clientRepository;
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Client updateClient(Long id, ClientUpdateDTO clientData) {
-        Client clientToUpdate = clientRepository.findById(id)
+    public AppUser updateClient(Long id, UserUpdateDTO clientData) {
+        AppUser clientToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
         clientToUpdate.setName(clientData.getName());
@@ -31,16 +33,16 @@ public class ClientService {
         clientToUpdate.setPhone(clientData.getPhone());
         clientToUpdate.setBirthDate(clientData.getBirthDate());
 
-        return clientRepository.save(clientToUpdate);
+        return userRepository.save(clientToUpdate);
     }
 
-    public Optional<Client> findByUsername(String username) {
-        return clientRepository.findByUsername(username);
+    public Optional<AppUser> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
-    public Optional<ClientDto> getClientById(Long id) {
-        return clientRepository.findById(id)
-        .map(client -> ClientDto.builder()
+    public Optional<UserDto> getClientById(Long id) {
+        return userRepository.findById(id)
+        .map(client -> UserDto.builder()
             .id(client.getId())
             .dni(client.getDni())
             .name(client.getName())
@@ -53,10 +55,10 @@ public class ClientService {
         );
     }
 
-    public List<ClientDto> getAllClients() {
-        List<Client> clients = clientRepository.findAll();
+    public List<UserDto> getAllClients() {
+        List<AppUser> clients = userRepository.findAll();
         return clients.stream()
-                .map(client -> ClientDto.builder()
+                .map(client -> UserDto.builder()
                         .id(client.getId())
                         .dni(client.getDni())
                         .name(client.getName())
@@ -69,13 +71,13 @@ public class ClientService {
                 .toList();
     }
 
-    public Optional<Client> findById(Long id) {
-        return clientRepository.findById(id);
+    public Optional<AppUser> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Transactional
-    public Client save(Client client) {
-        client.setPassword(passwordEncoder.encode(client.getPassword()));
-        return clientRepository.save(client);
+    public AppUser saveUser(AppUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 }

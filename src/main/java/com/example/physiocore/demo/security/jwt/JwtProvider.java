@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.example.physiocore.demo.model.Client;
+import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.UserRole;
 
 import io.jsonwebtoken.Claims;
@@ -34,7 +34,7 @@ public class JwtProvider {
 	public String generateToken(Authentication authentication) {
 		// Al implementar UserDetails en UserEntity lo que se guarda en Authentication
 		// es el propio UserEntity
-		Client principal = (Client) authentication.getPrincipal();
+		AppUser principal = (AppUser) authentication.getPrincipal();
 		// Fecha de expiración del token
 		Date tokenExpirationDate = new Date(System.currentTimeMillis() + jwtDurationTokenEnSegundos * 1000);
 

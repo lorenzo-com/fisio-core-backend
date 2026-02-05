@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor @Builder
-public class ClientUpdateDTO {
+public class UserUpdateDTO {
     private String name;
     private String surname;
     private String dni;

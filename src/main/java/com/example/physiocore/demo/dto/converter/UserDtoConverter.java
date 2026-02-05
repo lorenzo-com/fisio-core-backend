@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.example.physiocore.demo.dto.GetUserDto;
-import com.example.physiocore.demo.model.Client;
+import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.UserRole;
 
 @Component
 public class UserDtoConverter {
-	public GetUserDto convertUserEntityToGetUserDto(Client user, Long numAppoinments) {
+	public GetUserDto convertUserEntityToGetUserDto(AppUser user, Long numAppoinments) {
 		return GetUserDto.builder()
 				.id(user.getId())
 				.dni(user.getDni())
@@ -28,7 +28,7 @@ public class UserDtoConverter {
 				.build();
 	}
 
-    public GetUserDto convertUserEntityToGetUserDto(Client user) {
+    public GetUserDto convertUserEntityToGetUserDto(AppUser user) {
 		return GetUserDto.builder()
 				.id(user.getId())
 				.phone(user.getPhone())
@@ -45,18 +45,18 @@ public class UserDtoConverter {
 				.build();
 	}
 
-	public Client convertRegisterDtoToClient(RegisterDto dto) {
-		Client client = new Client();
-		client.setName(dto.getName());
-		client.setSurname(dto.getSurname());
-		client.setBirthDate(dto.getBirthDate());
-		client.setAddress(dto.getAddress());
-		client.setUsername(dto.getUsername());
-		client.setPhone(dto.getPhone());
-		client.setDni(dto.getDni());
-		client.setPassword(dto.getPassword());
-		client.getRoles().add(UserRole.PATIENT); // Default role for new users
+	public AppUser convertRegisterDtoToUser(RegisterDto dto, UserRole role) {
+		AppUser user = new AppUser();
+		user.setName(dto.getName());
+		user.setSurname(dto.getSurname());
+		user.setBirthDate(dto.getBirthDate());
+		user.setAddress(dto.getAddress());
+		user.setUsername(dto.getUsername());
+		user.setPhone(dto.getPhone());
+		user.setDni(dto.getDni());
+		user.setPassword(dto.getPassword());
+		user.getRoles().add(role);
 
-		return client;
+		return user;
 	}
 }

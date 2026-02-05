@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.physiocore.demo.dto.ClientDto;
-import com.example.physiocore.demo.dto.ClientUpdateDTO;
-import com.example.physiocore.demo.model.Client;
-import com.example.physiocore.demo.services.ClientService;
+import com.example.physiocore.demo.dto.UserDto;
+import com.example.physiocore.demo.dto.UserUpdateDTO;
+import com.example.physiocore.demo.model.AppUser;
+import com.example.physiocore.demo.services.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,25 +22,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/clients")
-public class ClientController {
+public class UserController {
     @Autowired
-    private ClientService clientService;
+    private UserService userService;
 
     @GetMapping("/all")
-    public List<ClientDto> getAllClients() {
-        return clientService.getAllClients();
+    public List<UserDto> getAllClients() {
+        return userService.getAllClients();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
-        return clientService.getClientById(id)
+        return userService.getClientById(id)
                 .map(client -> ResponseEntity.ok(client))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/update/{id}")
-	public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody ClientUpdateDTO clientData) {
-		Client updatedClient = clientService.updateClient(id, clientData);
+	public ResponseEntity<AppUser> updateClient(@PathVariable Long id, @RequestBody UserUpdateDTO clientData) {
+		AppUser updatedClient = userService.updateClient(id, clientData);
 		return ResponseEntity.ok(updatedClient);
 	}
 

@@ -26,20 +26,21 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import jakarta.persistence.InheritanceType;
 
-// TODO: Crear modelo de admin/usuarios
 @Entity
 @Getter
 @Setter
 @Data
+@ToString
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Client implements UserDetails {
+public class AppUser implements UserDetails {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -52,6 +53,8 @@ public class Client implements UserDetails {
 	private String username;
 	private String phone;
 	private String password;
+	@Column(nullable = true)
+	private Boolean active;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
