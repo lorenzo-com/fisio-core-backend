@@ -36,6 +36,19 @@ public class DataSeeder implements CommandLineRunner {
             admin.setActive(true);
             admin.setRoles(Set.of(UserRole.ADMIN));
 
+            // Creamos Trabajador
+            AppUser employee = new AppUser();
+            employee.setDni("X00001");
+            employee.setName("Maria");
+            employee.setSurname("Garcia");
+            employee.setBirthDate(java.time.LocalDate.now());
+            employee.setAddress("C/ Maria 2");
+            employee.setUsername("maria@employee.com");
+            employee.setPhone("123456789");
+            employee.setPassword(passwordEncoder.encode("123456"));
+            employee.setActive(true);
+            employee.setRoles(Set.of(UserRole.PROFESSIONAL));
+
             // Creamos un cliente de ejemplo
             AppUser client = new AppUser();
             client.setDni("Y00000");
@@ -50,6 +63,7 @@ public class DataSeeder implements CommandLineRunner {
 
             userRepository.save(admin);
             userRepository.save(client);
+            userRepository.save(employee);
             System.out.println("Usuarios iniciales creados con éxito.");
         }
     }

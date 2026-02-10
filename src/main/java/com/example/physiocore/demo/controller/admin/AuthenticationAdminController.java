@@ -28,7 +28,7 @@ import com.example.physiocore.demo.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/backoffice/auth")
 public class AuthenticationAdminController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -51,9 +51,9 @@ public class AuthenticationAdminController {
 
             AppUser principal = (AppUser) authentication.getPrincipal();
 
-            boolean isAdmin = principal.getRoles().contains(UserRole.ADMIN);
-            if (!isAdmin) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Tu cuenta no tiene permisos de administrador."));
+            boolean hasAccess = principal.getRoles().contains(UserRole.ADMIN) || principal.getRoles().contains(UserRole.PROFESSIONAL);
+            if (!hasAccess) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "No tienes permisos para acceder a esta área."));
             }
 
             // Validar si el usuario está activo
