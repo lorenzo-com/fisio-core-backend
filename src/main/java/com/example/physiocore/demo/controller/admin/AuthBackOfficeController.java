@@ -6,16 +6,20 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.physiocore.demo.dto.GetUserDto;
 import com.example.physiocore.demo.dto.converter.RegisterDto;
 import com.example.physiocore.demo.dto.converter.UserDtoConverter;
 import com.example.physiocore.demo.model.AppUser;
@@ -29,11 +33,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/backoffice/auth")
-public class AuthenticationAdminController {
+public class AuthBackOfficeController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtProvider tokenProvider;
+    @Autowired
+    private UserDtoConverter converter;
 
     @Autowired
     private UserService adminService;
@@ -41,6 +47,7 @@ public class AuthenticationAdminController {
     private UserDtoConverter userDtoConverter;
 
     @PostMapping("/login")
+    
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -51,9 +58,11 @@ public class AuthenticationAdminController {
 
             AppUser principal = (AppUser) authentication.getPrincipal();
 
-            boolean hasAccess = principal.getRoles().contains(UserRole.ADMIN) || principal.getRoles().contains(UserRole.PROFESSIONAL);
+            boolean hasAccess = principal.getRoles().contains(UserRole.ADMIN)
+                    || principal.getRoles().contains(UserRole.PROFESSIONAL);
             if (!hasAccess) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "No tienes permisos para acceder a esta área."));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(Map.of("message", "No tienes permisos para acceder a esta área."));
             }
 
             // Validar si el usuario está activo
@@ -68,7 +77,8 @@ public class AuthenticationAdminController {
                     .body(convertUserEntityAndTokenToJwtUserResponse(principal, jwtToken));
 
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Credenciales inválidas. Por favor, verifica tu nombre de usuario y contraseña."));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message",
+                    "Credenciales inválidas. Por favor, verifica tu nombre de usuario y contraseña."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("THERE WAS AN INTERNAL SERVER ERROR");
         }
@@ -93,5 +103,10 @@ public class AuthenticationAdminController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "Administrador registrado exitosamente."));
+    }
+
+    @GetMapping("/user/me")
+    public GetUserDto me(@AuthenticationPrincipal AppUser user) {
+        return converter.convertUserEntityToGetUserDto(user);
     }
 }

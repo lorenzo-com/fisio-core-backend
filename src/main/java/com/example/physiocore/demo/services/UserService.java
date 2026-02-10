@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.physiocore.demo.dto.UserDto;
 import com.example.physiocore.demo.dto.UserUpdateDTO;
 import com.example.physiocore.demo.model.AppUser;
+import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -56,7 +57,8 @@ public class UserService {
     }
 
     public List<UserDto> getAllClients() {
-        List<AppUser> clients = userRepository.findAll();
+        List<AppUser> clients = userRepository.findAllByRole(UserRole.PATIENT);
+        
         return clients.stream()
                 .map(client -> UserDto.builder()
                         .id(client.getId())
