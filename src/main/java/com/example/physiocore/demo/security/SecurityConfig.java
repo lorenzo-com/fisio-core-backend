@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -51,9 +52,11 @@ public class SecurityConfig {
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-						// .requestMatchers("/api/admin/**").hasRole("ADMIN")
-						.requestMatchers("/**")
-						.permitAll()
+						.requestMatchers("/backoffice/auth/login", "/auth/login", "/auth/register").permitAll()
+						.requestMatchers("/appointment/all", "/appointment/delete/{id}", "/client/all").hasAnyRole("ADMIN", "PROFESSIONAL")
+						.requestMatchers(HttpMethod.PUT, "/appointment/{id}").hasAnyRole("ADMIN", "PROFESSIONAL")
+						.requestMatchers(HttpMethod.PUT, "/client/update/{id}").hasAnyRole("ADMIN", "PATIENT")
+						.requestMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasAnyRole("ADMIN")
 						.anyRequest().authenticated())
 				// Añadimos un filtro encargado de coger el token y si es válido
 				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)

@@ -92,9 +92,4 @@ public class AuthenticationController {
 		Long numAppoinments = appointmentRepository.countByPatientId(user.getId());
 		return converter.convertUserEntityToGetUserDto(user, numAppoinments);
 	}
-
-	@GetMapping("/isAuthenticated")
-	public ResponseEntity<Boolean> isAuthenticated(@AuthenticationPrincipal AppUser user) {
-		return ResponseEntity.ok(user != null);
-	}
 }

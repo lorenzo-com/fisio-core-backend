@@ -43,22 +43,21 @@ public class UserService {
 
     public Optional<UserDto> getClientById(Long id) {
         return userRepository.findById(id)
-        .map(client -> UserDto.builder()
-            .id(client.getId())
-            .dni(client.getDni())
-            .name(client.getName())
-            .surname(client.getSurname())
-            .birthDate(client.getBirthDate() != null ? client.getBirthDate().toString() : null)
-            .address(client.getAddress())
-            .username(client.getUsername())
-            .phone(client.getPhone())
-            .build()
-        );
+                .map(client -> UserDto.builder()
+                        .id(client.getId())
+                        .dni(client.getDni())
+                        .name(client.getName())
+                        .surname(client.getSurname())
+                        .birthDate(client.getBirthDate() != null ? client.getBirthDate().toString() : null)
+                        .address(client.getAddress())
+                        .username(client.getUsername())
+                        .phone(client.getPhone())
+                        .build());
     }
 
     public List<UserDto> getAllClients() {
         List<AppUser> clients = userRepository.findAllByRole(UserRole.PATIENT);
-        
+
         return clients.stream()
                 .map(client -> UserDto.builder()
                         .id(client.getId())
@@ -81,5 +80,12 @@ public class UserService {
     public AppUser saveUser(AppUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public void deleteClient(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("El cliente con id " + id + " no existe.");
+        }
+        userRepository.deleteById(id);
     }
 }

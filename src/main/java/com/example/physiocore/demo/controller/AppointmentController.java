@@ -19,39 +19,41 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
     @Autowired
     private AppoinmentService appoinmentService;
 
+    // ADMIN y PROFESSIONAL
     @GetMapping("/all")
     public ResponseEntity<?> getAllApointments() {
         List<AppointmentResponse> appointments = appoinmentService.getAllAppointments();
         return ResponseEntity.ok(appointments);
     }
-    
 
-    @PostMapping("/new")
-    public ResponseEntity<?> createAppoinment(@RequestBody AppointmentRequest request) {
-        Appointment newAppointment = appoinmentService.createAppointment(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newAppointment);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequest data) {
-        AppointmentResponse updatedAppointment = appoinmentService.updateAppointment(id, data);
-        return ResponseEntity.ok(updatedAppointment);
-    }
-
+    // ADMIN, PROFESSIONAL y PATIENT
     @GetMapping("/{id}")
     public ResponseEntity<?> getAppointmentById(@PathVariable Long id) {
         AppointmentResponse appointment = appoinmentService.getAppointmentById(id);
         return ResponseEntity.ok(appointment);
     }
 
+    // ADMIN, PROFESSIONAL y PATIENT
+    @PostMapping("/new")
+    public ResponseEntity<?> createAppoinment(@RequestBody AppointmentRequest request) {
+        Appointment newAppointment = appoinmentService.createAppointment(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newAppointment);
+    }
+
+    // ADMIN y PROFESSIONAL
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateAppointment(@PathVariable Long id, @RequestBody AppointmentRequest data) {
+        AppointmentResponse updatedAppointment = appoinmentService.updateAppointment(id, data);
+        return ResponseEntity.ok(updatedAppointment);
+    }
+
+    // ADMIN y PROFESSIONAL
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
         appoinmentService.deleteAppointment(id);

@@ -21,16 +21,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/client")
 public class UserController {
     @Autowired
     private UserService userService;
 
+    // ADMIN y PROFESSIONAL
     @GetMapping("/all")
     public List<UserDto> getAllClients() {
         return userService.getAllClients();
     }
 
+    // ADMIN, PROFESSIONAL y CLIENT
     @GetMapping("/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
         return userService.getClientById(id)
@@ -38,15 +40,17 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // ADMIN y PATIENT (TODO: Validar si es admin o paciente)
     @PutMapping("/update/{id}")
 	public ResponseEntity<AppUser> updateClient(@PathVariable Long id, @RequestBody UserUpdateDTO clientData) {
 		AppUser updatedClient = userService.updateClient(id, clientData);
 		return ResponseEntity.ok(updatedClient);
 	}
 
+    // ADMIN
 	@DeleteMapping("/delete/{id}")
-	public String deleteClient(@PathVariable Long id) {
-
-		return "Deleted";
+	public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        userService.deleteClient(id);
+		return ResponseEntity.noContent().build();
 	}
 }
