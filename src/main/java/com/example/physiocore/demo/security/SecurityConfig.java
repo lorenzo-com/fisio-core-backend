@@ -52,7 +52,7 @@ public class SecurityConfig {
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/backoffice/auth/login", "/auth/login", "/auth/register").permitAll()
+						.requestMatchers("/backoffice/auth/login", "/auth/login", "/auth/register", "/h2-console").permitAll()
 						.requestMatchers("/appointment/all", "/appointment/delete/{id}", "/client/all").hasAnyRole("ADMIN", "PROFESSIONAL")
 						.requestMatchers(HttpMethod.PUT, "/appointment/{id}").hasAnyRole("ADMIN", "PROFESSIONAL")
 						.requestMatchers(HttpMethod.PUT, "/client/update/{id}").hasAnyRole("ADMIN", "PATIENT")
