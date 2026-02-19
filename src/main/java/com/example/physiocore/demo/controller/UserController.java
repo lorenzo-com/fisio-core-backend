@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.physiocore.demo.dto.UserDto;
@@ -18,22 +17,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
-@RequestMapping("/client")
 public class UserController {
     @Autowired
     private UserService userService;
 
     // ADMIN y PROFESSIONAL
-    @GetMapping("/all")
+    @GetMapping("/client/all")
     public List<UserDto> getAllClients() {
         return userService.getAllClients();
     }
 
+    // ADMIN
+    @GetMapping("/professional/all")
+    public List<UserDto> getAllProfessionals() {
+        return userService.getAllProfessionals();
+    }
+
     // ADMIN, PROFESSIONAL y CLIENT
-    @GetMapping("/{id}")
+    @GetMapping("/client/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
         return userService.getClientById(id)
                 .map(client -> ResponseEntity.ok(client))
@@ -41,16 +43,16 @@ public class UserController {
     }
 
     // ADMIN y PATIENT (TODO: Validar si es admin o paciente)
-    @PutMapping("/update/{id}")
-	public ResponseEntity<AppUser> updateClient(@PathVariable Long id, @RequestBody UserUpdateDTO clientData) {
-		AppUser updatedClient = userService.updateClient(id, clientData);
-		return ResponseEntity.ok(updatedClient);
-	}
+    @PutMapping("/client/update/{id}")
+    public ResponseEntity<AppUser> updateClient(@PathVariable Long id, @RequestBody UserUpdateDTO clientData) {
+        AppUser updatedClient = userService.updateClient(id, clientData);
+        return ResponseEntity.ok(updatedClient);
+    }
 
     // ADMIN
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+    @DeleteMapping("/client/delete/{id}")
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         userService.deleteClient(id);
-		return ResponseEntity.noContent().build();
-	}
+        return ResponseEntity.noContent().build();
+    }
 }

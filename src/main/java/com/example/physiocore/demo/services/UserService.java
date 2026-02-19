@@ -72,6 +72,38 @@ public class UserService {
                 .toList();
     }
 
+    public List<UserDto> getAllProfessionals() {
+        List<AppUser> professionals = userRepository.findAllByRole(UserRole.PROFESSIONAL);
+        return professionals.stream()
+                .map(professional -> UserDto.builder()
+                        .id(professional.getId())
+                        .dni(professional.getDni())
+                        .name(professional.getName())
+                        .surname(professional.getSurname())
+                        .birthDate(professional.getBirthDate() != null ? professional.getBirthDate().toString() : null)
+                        .address(professional.getAddress())
+                        .username(professional.getUsername())
+                        .phone(professional.getPhone())
+                        .build())
+                .toList();
+    }
+
+    public List<UserDto> getAllAdmins() {
+        List<AppUser> admins = userRepository.findAllByRole(UserRole.ADMIN);
+        return admins.stream()
+                .map(admin -> UserDto.builder()
+                        .id(admin.getId())
+                        .dni(admin.getDni())
+                        .name(admin.getName())
+                        .surname(admin.getSurname())
+                        .birthDate(admin.getBirthDate() != null ? admin.getBirthDate().toString() : null)
+                        .address(admin.getAddress())
+                        .username(admin.getUsername())
+                        .phone(admin.getPhone())
+                        .build())
+                .toList();
+    }
+
     public Optional<AppUser> findById(Long id) {
         return userRepository.findById(id);
     }
