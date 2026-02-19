@@ -29,7 +29,7 @@ public class UserController {
     }
 
     // ADMIN
-    @GetMapping("/professional/all")
+    @GetMapping("/professionals")
     public List<UserDto> getAllProfessionals() {
         return userService.getAllProfessionals();
     }
