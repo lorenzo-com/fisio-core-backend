@@ -1,5 +1,6 @@
 package com.example.physiocore.demo.config;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.physiocore.demo.model.AppUser;
+import com.example.physiocore.demo.model.Appointment;
 import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.repository.UserRepository;
 
@@ -60,6 +62,13 @@ public class DataSeeder implements CommandLineRunner {
             client.setPhone("987654321");
             client.setPassword(passwordEncoder.encode("123456"));
             client.setRoles(Set.of(UserRole.PATIENT));
+
+            // Appointment appointment1 = new Appointment();
+            // appointment1.setDate(new Date().toString());
+            // appointment1.setHourValue("11:00");
+            // appointment1.setService("Masaje terapéutico");
+            // AppUser john = userRepository.findByUsername("john@client.com").orElseThrow();
+            // appointment1.setPatient(john);
 
             userRepository.save(admin);
             userRepository.save(client);

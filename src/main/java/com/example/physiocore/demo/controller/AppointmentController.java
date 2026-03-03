@@ -5,12 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.physiocore.demo.dto.AppointmentRequest;
 import com.example.physiocore.demo.dto.AppointmentResponse;
+import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.Appointment;
+import com.example.physiocore.demo.model.StatusAppointment;
 import com.example.physiocore.demo.services.AppoinmentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +27,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class AppointmentController {
     @Autowired
     private AppoinmentService appoinmentService;
+
+    // USUARIO AUTENTICADO
+    @GetMapping
+    public ResponseEntity<?> getUserAppointments(@AuthenticationPrincipal AppUser user) {
+        List<Appointment> appointments = appoinmentService.findByPatient(user);
+
+        return ResponseEntity.ok(appointments);
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<?> getUserPendingAppointments(@AuthenticationPrincipal AppUser user) {
+        List<Appointment> appointments = appoinmentService.findByPatientAndState(user, StatusAppointment.PENDIENTE);
+
+        return ResponseEntity.ok(appointments);
+    }
 
     // ADMIN y PROFESSIONAL
     @GetMapping("/all")

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.physiocore.demo.dto.AppointmentRequest;
 import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.Appointment;
+import com.example.physiocore.demo.model.StatusAppointment;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.repository.AppoinmentRepository;
 import com.example.physiocore.demo.repository.UserRepository;
@@ -19,6 +20,18 @@ public class AppoinmentService {
     private AppoinmentRepository appointmentRepository;
     @Autowired
     private UserRepository clientRepository;
+
+    public List<Appointment> findByPatient(AppUser user) {
+        List<Appointment> appointments = appointmentRepository.findByPatient(user);
+
+        return appointments;
+    }
+    
+    public List<Appointment> findByPatientAndState(AppUser user, StatusAppointment state) {
+        List<Appointment> appointments = appointmentRepository.findByPatientAndState(user, state);
+
+        return appointments;
+    }
 
     public Appointment createAppointment(AppointmentRequest request) {
         AppUser patient = clientRepository.findById(request.getPatient_id())
