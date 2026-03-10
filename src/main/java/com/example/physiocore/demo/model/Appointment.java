@@ -22,7 +22,8 @@ public class Appointment {
     private Long id;
     private String date;
     private String hourValue;
-    private String service;
+    @Enumerated(EnumType.STRING)
+    private ClinicService service;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
