@@ -24,11 +24,13 @@ public class Appointment {
     private String hourValue;
     @Enumerated(EnumType.STRING)
     private ClinicService service;
+    @Enumerated(EnumType.STRING)
+    private StatusAppointment state = StatusAppointment.PENDIENTE;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private AppUser patient;
-
-    @Enumerated(EnumType.STRING)
-    private StatusAppointment state = StatusAppointment.PENDIENTE;
+    @ManyToOne
+    @JoinColumn(name = "professional_id", nullable = false)
+    private AppUser professional;
 }
