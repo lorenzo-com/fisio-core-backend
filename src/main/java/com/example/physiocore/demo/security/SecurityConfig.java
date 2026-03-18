@@ -58,7 +58,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.PUT, "/appointment/{id}").hasAnyRole("ADMIN", "PROFESSIONAL")
 						.requestMatchers(HttpMethod.PUT, "/client/update/{id}").hasAnyRole("ADMIN", "PATIENT")
 						.requestMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasAnyRole("ADMIN")
-						.requestMatchers("/professionals").hasAnyRole("ADMIN")
+						.requestMatchers("/professionals", "/professionals/**").hasAnyRole("ADMIN")
 						.anyRequest().authenticated())
 				// Añadimos un filtro encargado de coger el token y si es válido
 				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -74,7 +74,7 @@ public class SecurityConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:5000"));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 		configuration.setExposedHeaders(Arrays.asList("Set-Cookie"));
 		configuration.setAllowCredentials(true);

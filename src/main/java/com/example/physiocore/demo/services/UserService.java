@@ -41,6 +41,12 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public AppUser cambiarEstado(Long id, boolean active) {
+        AppUser user = userRepository.getById(id);
+        user.setActive(active);
+        return userRepository.save(user);
+    }
+
     public Optional<UserDto> getClientById(Long id) {
         return userRepository.findById(id)
                 .map(client -> UserDto.builder()
@@ -84,6 +90,7 @@ public class UserService {
                         .address(professional.getAddress())
                         .username(professional.getUsername())
                         .phone(professional.getPhone())
+                        .active(professional.getActive())
                         .build())
                 .toList();
     }
