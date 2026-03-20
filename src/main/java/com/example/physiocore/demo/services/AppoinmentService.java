@@ -1,5 +1,7 @@
 package com.example.physiocore.demo.services;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,7 @@ public class AppoinmentService {
 
         return appointments;
     }
-    
+
     public List<Appointment> findByPatientAndState(AppUser user, StatusAppointment state) {
         List<Appointment> appointments = appointmentRepository.findByPatientAndState(user, state);
 
@@ -36,12 +38,16 @@ public class AppoinmentService {
     public Appointment createAppointment(AppointmentRequest request) {
         AppUser patient = clientRepository.findById(request.getPatient_id())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con ID: " + request.getPatient_id()));
+        AppUser professional = clientRepository.findById(request.getProfessional_id())
+                .orElseThrow(() -> new RuntimeException(
+                        "Profesional no encontrado con ID: " + request.getProfessional_id()));
 
         Appointment appointment = new Appointment();
         appointment.setDate(request.getDate());
         appointment.setHourValue(request.getHour());
         appointment.setService(request.getService());
         appointment.setPatient(patient);
+        appointment.setProfessional(professional);
 
         return appointmentRepository.save(appointment);
     }
@@ -92,16 +98,43 @@ public class AppoinmentService {
     public List<AppointmentResponse> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
 
+        return appointments.stream()
+            .sorted((a, b) -> {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                    Date dateA = sdf.parse(a.getDate() + " " + a.getHourValue());
+                    Date dateB = sdf.parse(b.getDate() + " " + b.getHourValue());
+                    return dateA.compareTo(dateB);
+                } catch (Exception e) {
+                    return 0;
+                }
+            })
+            .map(data -> AppointmentResponse.builder()
+                    .id(data.getId())
+                    .name(data.getPatient().getName())
+                    .surname(data.getPatient().getSurname())
+                    .phone(data.getPatient().getPhone())
+                    .date(data.getDate())
+                    .professionalFullName(data.getProfessional().getName() + ' ' + data.getProfessional().getSurname())
+                    .hour(data.getHourValue())
+                    .state(data.getState())
+                    .build())
+            .collect(Collectors.toList());
+    }
+
+    public List<AppointmentResponse> getAppointmentsByProfessional(AppUser professional) {
+        List<Appointment> appointments = appointmentRepository.findByProfessional(professional);
+
         return appointments.stream().map(data -> {
             return AppointmentResponse.builder()
-                .id(data.getId())
-                .name(data.getPatient().getName())
-                .surname(data.getPatient().getSurname())
-                .phone(data.getPatient().getPhone())
-                .date(data.getDate())
-                .hour(data.getHourValue())
-                .state(data.getState())
-                .build();
+                    .id(data.getId())
+                    .name(data.getPatient().getName())
+                    .surname(data.getPatient().getSurname())
+                    .phone(data.getPatient().getPhone())
+                    .date(data.getDate())
+                    .hour(data.getHourValue())
+                    .state(data.getState())
+                    .build();
         }).collect(Collectors.toList());
     }
 

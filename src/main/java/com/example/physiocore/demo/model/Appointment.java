@@ -26,6 +26,7 @@ public class Appointment {
     private ClinicService service;
     @Enumerated(EnumType.STRING)
     private StatusAppointment state = StatusAppointment.PENDIENTE;
+    private String annotation;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)

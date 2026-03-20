@@ -37,6 +37,10 @@ public class UserService {
         return userRepository.save(clientToUpdate);
     }
 
+    public List<AppUser> findAllAdmins() {
+        return userRepository.findAllByRole(UserRole.ADMIN);
+    }
+
     public Optional<AppUser> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

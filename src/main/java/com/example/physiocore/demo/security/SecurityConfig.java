@@ -54,11 +54,11 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/backoffice/auth/login", "/auth/login", "/auth/register", "/h2-console/**", "/email/send")
 						.permitAll()
-						.requestMatchers("/appointment/all", "/appointment/delete/{id}", "/client/all").hasAnyRole("ADMIN", "PROFESSIONAL")
+						.requestMatchers("/appointment/all", "/appointment/delete/{id}", "/client/all", "/appointment/new").hasAnyRole("ADMIN", "PROFESSIONAL")
 						.requestMatchers(HttpMethod.PUT, "/appointment/{id}").hasAnyRole("ADMIN", "PROFESSIONAL")
 						.requestMatchers(HttpMethod.PUT, "/client/update/{id}").hasAnyRole("ADMIN", "PATIENT")
-						.requestMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasAnyRole("ADMIN")
-						.requestMatchers("/professionals", "/professionals/**").hasAnyRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasRole("ADMIN")
+						.requestMatchers("/professionals", "/professionals/**", "/administrators/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				// Añadimos un filtro encargado de coger el token y si es válido
 				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)

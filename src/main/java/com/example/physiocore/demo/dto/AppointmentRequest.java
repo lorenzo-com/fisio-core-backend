@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class AppointmentRequest {
     private Long patient_id;
+    private Long professional_id;
     private String date;
     private String hour;
     private ClinicService service;

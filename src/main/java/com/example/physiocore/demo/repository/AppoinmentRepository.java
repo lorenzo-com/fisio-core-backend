@@ -12,8 +12,10 @@ import com.example.physiocore.demo.model.StatusAppointment;
 
 public interface AppoinmentRepository extends JpaRepository<Appointment, Long> {
     @Query("SELECT COUNT(a) FROM Appointment a WHERE a.patient.id = :patientId AND a.state = 'PENDIENTE'") Long countByPatientId(@Param("patientId") Long patientId);
-
+    
     List<Appointment> findByPatient(AppUser patient);
 
     List<Appointment> findByPatientAndState(AppUser patient, StatusAppointment state);
+
+    List<Appointment> findByProfessional(AppUser professional);
 }

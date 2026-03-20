@@ -24,25 +24,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ADMIN y PROFESSIONAL
-    @GetMapping("/client/all")
-    public List<UserDto> getAllClients() {
-        return userService.getAllClients();
-    }
-
-    // ADMIN
-    @GetMapping("/professionals")
-    public List<UserDto> getAllProfessionals() {
-        return userService.getAllProfessionals();
-    }
-
-    // ADMIN
-    @PatchMapping("/professionals/{id}/estado")
-    public ResponseEntity<AppUser> cambiarEstado(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
-        boolean active = body.get("active");
-        return ResponseEntity.ok(userService.cambiarEstado(id, active));
-    }
-
     // ADMIN, PROFESSIONAL y CLIENT
     @GetMapping("/client/{id}")
     public ResponseEntity<?> getClientById(@PathVariable Long id) {
@@ -58,7 +39,29 @@ public class UserController {
         return ResponseEntity.ok(updatedClient);
     }
 
+    // ADMIN y PROFESSIONAL
+    @GetMapping("/client/all")
+    public List<UserDto> getAllClients() {
+        return userService.getAllClients();
+    }
+
     // ADMIN
+    @GetMapping("/professionals")
+    public List<UserDto> getAllProfessionals() {
+        return userService.getAllProfessionals();
+    }
+
+    @PatchMapping("/professionals/{id}/estado")
+    public ResponseEntity<AppUser> cambiarEstado(@PathVariable Long id, @RequestBody Map<String, Boolean> body) {
+        boolean active = body.get("active");
+        return ResponseEntity.ok(userService.cambiarEstado(id, active));
+    }
+
+    @GetMapping("/administrators")
+    public ResponseEntity<List<AppUser>> getAdmins() {
+        return ResponseEntity.ok(userService.findAllAdmins());
+    }
+
     @DeleteMapping("/client/delete/{id}")
     public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         userService.deleteClient(id);

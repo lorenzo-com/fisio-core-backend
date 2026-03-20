@@ -14,6 +14,7 @@ import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.Appointment;
 import com.example.physiocore.demo.model.StatusAppointment;
+import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.services.AppoinmentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,28 +29,6 @@ public class AppointmentController {
     @Autowired
     private AppoinmentService appoinmentService;
 
-    // USUARIO AUTENTICADO
-    @GetMapping
-    public ResponseEntity<?> getUserAppointments(@AuthenticationPrincipal AppUser user) {
-        List<Appointment> appointments = appoinmentService.findByPatient(user);
-
-        return ResponseEntity.ok(appointments);
-    }
-
-    @GetMapping("/pending")
-    public ResponseEntity<?> getUserPendingAppointments(@AuthenticationPrincipal AppUser user) {
-        List<Appointment> appointments = appoinmentService.findByPatientAndState(user, StatusAppointment.PENDIENTE);
-
-        return ResponseEntity.ok(appointments);
-    }
-
-    // ADMIN y PROFESSIONAL
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllApointments() {
-        List<AppointmentResponse> appointments = appoinmentService.getAllAppointments();
-        return ResponseEntity.ok(appointments);
-    }
-
     // ADMIN, PROFESSIONAL y PATIENT
     @GetMapping("/{id}")
     public ResponseEntity<?> getAppointmentById(@PathVariable Long id) {
@@ -57,7 +36,24 @@ public class AppointmentController {
         return ResponseEntity.ok(appointment);
     }
 
-    // ADMIN, PROFESSIONAL y PATIENT
+    @GetMapping
+    public ResponseEntity<?> getUserAppointments(@AuthenticationPrincipal AppUser user) {
+        List<Appointment> appointments = appoinmentService.findByPatient(user);
+
+        return ResponseEntity.ok(appointments);
+    }
+
+    // ADMIN y PROFESSIONAL
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllApointments(@AuthenticationPrincipal AppUser user) {
+        if (user.getRoles().contains(UserRole.ADMIN)) {
+            return ResponseEntity.ok(appoinmentService.getAllAppointments());
+        } else {
+            return ResponseEntity.ok(appoinmentService.getAppointmentsByProfessional(user));
+        }
+    }
+
+    // ADMIN y PROFESSIONAL
     @PostMapping("/new")
     public ResponseEntity<?> createAppoinment(@RequestBody AppointmentRequest request) {
         Appointment newAppointment = appoinmentService.createAppointment(request);
@@ -76,5 +72,12 @@ public class AppointmentController {
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
         appoinmentService.deleteAppointment(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<?> getUserPendingAppointments(@AuthenticationPrincipal AppUser user) {
+        List<Appointment> appointments = appoinmentService.findByPatientAndState(user, StatusAppointment.PENDIENTE);
+
+        return ResponseEntity.ok(appointments);
     }
 }

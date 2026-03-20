@@ -27,6 +27,7 @@ public class AppointmentResponse {
     private String username;
     private String phone;
     private String date;
+    private String professionalFullName;
     private String hour;
     private ClinicService service;
     private StatusAppointment state;
