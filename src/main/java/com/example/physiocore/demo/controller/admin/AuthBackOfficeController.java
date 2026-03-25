@@ -67,7 +67,7 @@ public class AuthBackOfficeController {
             // Validar si el usuario está activo
             boolean isActive = Boolean.TRUE.equals(principal.getActive());
             if (!isActive) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Tu cuenta está inactiva."));
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "Su cuenta está inactiva. Por favor, contacte con el administrador."));
             }
 
             String jwtToken = tokenProvider.generateToken(authentication);

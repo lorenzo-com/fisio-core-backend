@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.Appointment;
 import com.example.physiocore.demo.model.ClinicService;
+import com.example.physiocore.demo.model.StatusAppointment;
 import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.repository.AppoinmentRepository;
 import com.example.physiocore.demo.repository.UserRepository;
@@ -68,9 +69,9 @@ public class DataSeeder implements CommandLineRunner {
             employee2.setActive(true);
             employee2.setRoles(Set.of(UserRole.PROFESSIONAL));
 
-            // Creamos un cliente de ejemplo
+            // Creamos dos clientes
             AppUser client = new AppUser();
-            client.setDni("Y00000");
+            client.setDni("Y00001");
             client.setName("John");
             client.setSurname("Doe");
             client.setBirthDate(java.time.LocalDate.now());
@@ -80,100 +81,189 @@ public class DataSeeder implements CommandLineRunner {
             client.setPassword(passwordEncoder.encode("123456"));
             client.setRoles(Set.of(UserRole.PATIENT));
 
+            AppUser client2 = new AppUser();
+            client2.setDni("Y00002");
+            client2.setName("Sarah");
+            client2.setSurname("Smith");
+            client2.setBirthDate(java.time.LocalDate.now());
+            client2.setAddress("C/ Sarah 2");
+            client2.setUsername("sarah@client.com");
+            client2.setPhone("987654321");
+            client2.setPassword(passwordEncoder.encode("123456"));
+            client2.setRoles(Set.of(UserRole.PATIENT));
+
             userRepository.save(admin);
-            userRepository.save(client);
             userRepository.save(employee);
             userRepository.save(employee2);
+            userRepository.save(client);
+            userRepository.save(client2);
             System.out.println("Usuarios iniciales creados con éxito.");
 
             // Obtenemos los usuarios
             AppUser john = userRepository.findByUsername("john@client.com").orElseThrow();
-            // Creamos citas para ese cliente para ver paginación
-            // Appointment appointment1 = new Appointment();
-            // appointment1.setDate(LocalDate.now().toString());
-            // appointment1.setHourValue("11:00");
-            // appointment1.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
-            // appointment1.setPatient(john);
+            AppUser sarah = userRepository.findByUsername("sarah@client.com").orElseThrow();
+            AppUser maria = userRepository.findByUsername("maria@employee.com").orElseThrow();
+            AppUser jose = userRepository.findByUsername("jose@employee.com").orElseThrow();
 
-            // Appointment appointment2 = new Appointment();
-            // appointment2.setDate(LocalDate.now().toString());
-            // appointment2.setHourValue("12:00");
-            // appointment2.setService(ClinicService.REHABILITACION);
-            // appointment2.setPatient(john);
+            // Creamos citas para esos clientes para ver paginación y filtro para profesionales
+            Appointment appointment1 = new Appointment();
+            appointment1.setDate(LocalDate.now().toString());
+            appointment1.setHourValue("11:00");
+            appointment1.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
+            appointment1.setPatient(john);
+            appointment1.setProfessional(maria);
 
-            // Appointment appointment3 = new Appointment();
-            // appointment3.setDate(LocalDate.now().toString());
-            // appointment3.setHourValue("13:00");
-            // appointment3.setService(ClinicService.MASAJE_TERAPEUTICO);
-            // appointment3.setPatient(john);
+            Appointment appointment2 = new Appointment();
+            appointment2.setDate(LocalDate.now().toString());
+            appointment2.setHourValue("12:00");
+            appointment2.setService(ClinicService.REHABILITACION);
+            appointment2.setState(StatusAppointment.CANCELADA);
+            appointment2.setPatient(john);
+            appointment2.setProfessional(maria);
 
-            // Appointment appointment4 = new Appointment();
-            // appointment4.setDate(LocalDate.now().toString());
-            // appointment4.setHourValue("14:00");
-            // appointment4.setService(ClinicService.ESCUELA_ESPALDA);
-            // appointment4.setPatient(john);
+            Appointment appointment3 = new Appointment();
+            appointment3.setDate(LocalDate.now().toString());
+            appointment3.setHourValue("13:00");
+            appointment3.setService(ClinicService.MASAJE_TERAPEUTICO);
+            appointment3.setState(StatusAppointment.COMPLETADA);
+            appointment3.setPatient(john);
+            appointment3.setProfessional(maria);
 
-            // Appointment appointment5 = new Appointment();
-            // appointment5.setDate(LocalDate.now().toString());
-            // appointment5.setHourValue("15:00");
-            // appointment5.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
-            // appointment5.setPatient(john);
+            Appointment appointment4 = new Appointment();
+            appointment4.setDate(LocalDate.now().toString());
+            appointment4.setHourValue("14:00");
+            appointment4.setService(ClinicService.ESCUELA_ESPALDA);
+            appointment4.setState(StatusAppointment.AUSENTE);
+            appointment4.setPatient(john);
+            appointment4.setProfessional(maria);
 
-            // Appointment appointment6 = new Appointment();
-            // appointment6.setDate(LocalDate.now().toString());
-            // appointment6.setHourValue("16:00");
-            // appointment6.setService(ClinicService.REHABILITACION);
-            // appointment6.setPatient(john);
+            Appointment appointment5 = new Appointment();
+            appointment5.setDate(LocalDate.now().toString());
+            appointment5.setHourValue("15:00");
+            appointment5.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
+            appointment5.setPatient(john);
+            appointment5.setProfessional(maria);
 
-            // Appointment appointment7 = new Appointment();
-            // appointment7.setDate(LocalDate.now().toString());
-            // appointment7.setHourValue("17:00");
-            // appointment7.setService(ClinicService.MASAJE_TERAPEUTICO);
-            // appointment7.setPatient(john);
+            Appointment appointment6 = new Appointment();
+            appointment6.setDate(LocalDate.now().toString());
+            appointment6.setHourValue("16:00");
+            appointment6.setService(ClinicService.REHABILITACION);
+            appointment6.setState(StatusAppointment.CANCELADA);
+            appointment6.setPatient(john);
+            appointment6.setProfessional(maria);
 
-            // Appointment appointment8 = new Appointment();
-            // appointment8.setDate(LocalDate.now().toString());
-            // appointment8.setHourValue("18:00");
-            // appointment8.setService(ClinicService.ESCUELA_ESPALDA);
-            // appointment8.setPatient(john);
+            Appointment appointment7 = new Appointment();
+            appointment7.setDate(LocalDate.now().toString());
+            appointment7.setHourValue("17:00");
+            appointment7.setService(ClinicService.MASAJE_TERAPEUTICO);
+            appointment7.setState(StatusAppointment.COMPLETADA);
+            appointment7.setPatient(john);
+            appointment7.setProfessional(maria);
 
-            // Appointment appointment9 = new Appointment();
-            // appointment9.setDate(LocalDate.now().toString());
-            // appointment9.setHourValue("19:00");
-            // appointment9.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
-            // appointment9.setPatient(john);
+            Appointment appointment8 = new Appointment();
+            appointment8.setDate(LocalDate.now().toString());
+            appointment8.setHourValue("18:00");
+            appointment8.setService(ClinicService.ESCUELA_ESPALDA);
+            appointment8.setState(StatusAppointment.AUSENTE);
+            appointment8.setPatient(john);
+            appointment8.setProfessional(maria);
 
-            // Appointment appointment10 = new Appointment();
-            // appointment10.setDate(LocalDate.now().toString());
-            // appointment10.setHourValue("11:00");
-            // appointment10.setService(ClinicService.REHABILITACION);
-            // appointment10.setPatient(john);
+            Appointment appointment9 = new Appointment();
+            appointment9.setDate(LocalDate.now().toString());
+            appointment9.setHourValue("19:00");
+            appointment9.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
+            appointment9.setPatient(john);
+            appointment9.setProfessional(maria);
 
-            // Appointment appointment11 = new Appointment();
-            // appointment11.setDate(LocalDate.now().toString());
-            // appointment11.setHourValue("12:00");
-            // appointment11.setService(ClinicService.MASAJE_TERAPEUTICO);
-            // appointment11.setPatient(john);
+            Appointment appointment10 = new Appointment();
+            appointment10.setDate(LocalDate.now().toString());
+            appointment10.setHourValue("11:00");
+            appointment10.setService(ClinicService.REHABILITACION);
+            appointment10.setState(StatusAppointment.CANCELADA);
+            appointment10.setPatient(john);
+            appointment10.setProfessional(maria);
 
-            // Appointment appointment12 = new Appointment();
-            // appointment12.setDate(LocalDate.now().toString());
-            // appointment12.setHourValue("13:00");
-            // appointment12.setService(ClinicService.ESCUELA_ESPALDA);
-            // appointment12.setPatient(john);
+            Appointment appointment11 = new Appointment();
+            appointment11.setDate(LocalDate.now().toString());
+            appointment11.setHourValue("12:00");
+            appointment11.setService(ClinicService.MASAJE_TERAPEUTICO);
+            appointment11.setState(StatusAppointment.COMPLETADA);
+            appointment11.setPatient(john);
+            appointment11.setProfessional(maria);
 
-            // appoinmentRepository.save(appointment1);
-            // appoinmentRepository.save(appointment2);
-            // appoinmentRepository.save(appointment3);
-            // appoinmentRepository.save(appointment4);
-            // appoinmentRepository.save(appointment5);
-            // appoinmentRepository.save(appointment6);
-            // appoinmentRepository.save(appointment7);
-            // appoinmentRepository.save(appointment8);
-            // appoinmentRepository.save(appointment9);
-            // appoinmentRepository.save(appointment10);
-            // appoinmentRepository.save(appointment11);
-            // appoinmentRepository.save(appointment12);
-            // System.out.println("Reservas iniciales creadas con éxito.");
+            Appointment appointment12 = new Appointment();
+            appointment12.setDate(LocalDate.now().toString());
+            appointment12.setHourValue("13:00");
+            appointment12.setService(ClinicService.ESCUELA_ESPALDA);
+            appointment12.setState(StatusAppointment.AUSENTE);
+            appointment12.setPatient(john);
+            appointment12.setProfessional(maria);
+
+            Appointment appointment13 = new Appointment();
+            appointment13.setDate(LocalDate.now().toString());
+            appointment13.setHourValue("11:00");
+            appointment13.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
+            appointment13.setPatient(sarah);
+            appointment13.setProfessional(jose);
+
+            Appointment appointment14 = new Appointment();
+            appointment14.setDate(LocalDate.now().toString());
+            appointment14.setHourValue("12:00");
+            appointment14.setService(ClinicService.REHABILITACION);
+            appointment14.setState(StatusAppointment.CANCELADA);            
+            appointment14.setPatient(sarah);
+            appointment14.setProfessional(jose);
+
+            Appointment appointment15 = new Appointment();
+            appointment15.setDate(LocalDate.now().toString());
+            appointment15.setHourValue("13:00");
+            appointment15.setService(ClinicService.MASAJE_TERAPEUTICO);
+            appointment15.setState(StatusAppointment.COMPLETADA);
+            appointment15.setPatient(sarah);
+            appointment15.setProfessional(jose);
+
+            Appointment appointment16 = new Appointment();
+            appointment16.setDate(LocalDate.now().toString());
+            appointment16.setHourValue("14:00");
+            appointment16.setService(ClinicService.ESCUELA_ESPALDA);
+            appointment16.setState(StatusAppointment.AUSENTE);
+            appointment16.setPatient(sarah);
+            appointment16.setProfessional(jose);
+
+            Appointment appointment17 = new Appointment();
+            appointment17.setDate(LocalDate.now().toString());
+            appointment17.setHourValue("15:00");
+            appointment17.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
+            appointment17.setPatient(sarah);
+            appointment17.setProfessional(jose);
+
+            Appointment appointment18 = new Appointment();
+            appointment18.setDate(LocalDate.now().toString());
+            appointment18.setHourValue("16:00");
+            appointment18.setService(ClinicService.MASAJE_TERAPEUTICO);
+            appointment18.setState(StatusAppointment.CANCELADA);
+            appointment18.setPatient(sarah);
+            appointment18.setProfessional(jose);
+
+            appoinmentRepository.save(appointment1);
+            appoinmentRepository.save(appointment2);
+            appoinmentRepository.save(appointment3);
+            appoinmentRepository.save(appointment4);
+            appoinmentRepository.save(appointment5);
+            appoinmentRepository.save(appointment6);
+            appoinmentRepository.save(appointment7);
+            appoinmentRepository.save(appointment8);
+            appoinmentRepository.save(appointment9);
+            appoinmentRepository.save(appointment10);
+            appoinmentRepository.save(appointment11);
+            appoinmentRepository.save(appointment12);
+            appoinmentRepository.save(appointment13);
+            appoinmentRepository.save(appointment14);
+            appoinmentRepository.save(appointment15);
+            appoinmentRepository.save(appointment16);
+            appoinmentRepository.save(appointment17);
+            appoinmentRepository.save(appointment18);
+            System.out.println("Reservas iniciales creadas con éxito.");
         }
     }
 }
