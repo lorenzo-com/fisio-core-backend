@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.physiocore.demo.dto.GetUserDto;
-import com.example.physiocore.demo.dto.converter.RegisterDto;
 import com.example.physiocore.demo.dto.converter.UserDtoConverter;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.security.jwt.JwtProvider;
 import com.example.physiocore.demo.security.jwt.model.JwtUserResponse;
 import com.example.physiocore.demo.security.jwt.model.LoginRequest;
-import com.example.physiocore.demo.services.UserService;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -40,13 +38,7 @@ public class AuthBackOfficeController {
     @Autowired
     private UserDtoConverter converter;
 
-    @Autowired
-    private UserService adminService;
-    @Autowired
-    private UserDtoConverter userDtoConverter;
-
-    @PostMapping("/login")
-    
+    @PostMapping("/login")    
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -88,20 +80,6 @@ public class AuthBackOfficeController {
                 .roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet()))
                 .token(jwtToken)
                 .build();
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> newAdmin(@RequestBody RegisterDto newUser) {
-        if (adminService.findByUsername(newUser.getUsername()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("EMAIL ALREADY EXISTS");
-        }
-
-        AppUser admin = userDtoConverter.convertRegisterDtoToUser(newUser, UserRole.ADMIN);
-
-        userDtoConverter.convertUserEntityToGetUserDto(adminService.saveUser(admin));
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Administrador registrado exitosamente."));
     }
 
     @GetMapping("/user/me")

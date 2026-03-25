@@ -23,16 +23,47 @@ public class AppoinmentService {
     @Autowired
     private UserRepository clientRepository;
 
-    public List<Appointment> findByPatient(AppUser user) {
+    public List<AppointmentResponse> findByPatient(AppUser user) {
         List<Appointment> appointments = appointmentRepository.findByPatient(user);
 
-        return appointments;
+        return appointments.stream()
+                .map(appointment -> AppointmentResponse.builder()
+                        .id(appointment.getId())
+                        .patientId(appointment.getPatient().getId())
+                        .username(appointment.getPatient().getUsername())
+                        .name(appointment.getPatient().getName())
+                        .surname(appointment.getPatient().getSurname())
+                        .phone(appointment.getPatient().getPhone())
+                        .date(appointment.getDate())
+                        .hour(appointment.getHourValue())
+                        .service(appointment.getService())
+                        .state(appointment.getState())
+                        .professionalFullName(
+                                appointment.getProfessional().getName() + " "
+                                        + appointment.getProfessional().getSurname())
+                        .build())
+                .collect(Collectors.toList());
     }
 
-    public List<Appointment> findByPatientAndState(AppUser user, StatusAppointment state) {
-        List<Appointment> appointments = appointmentRepository.findByPatientAndState(user, state);
-
-        return appointments;
+    public List<AppointmentResponse> findByPatientAndState(AppUser user, StatusAppointment state) {
+        return appointmentRepository.findByPatientAndState(user, state)
+            .stream()
+            .map(appointment -> AppointmentResponse.builder()
+                    .id(appointment.getId())
+                    .patientId(appointment.getPatient().getId())
+                    .username(appointment.getPatient().getUsername())
+                    .name(appointment.getPatient().getName())
+                    .surname(appointment.getPatient().getSurname())
+                    .phone(appointment.getPatient().getPhone())
+                    .date(appointment.getDate())
+                    .hour(appointment.getHourValue())
+                    .service(appointment.getService())
+                    .state(appointment.getState())
+                    .professionalFullName(
+                        appointment.getProfessional().getName() + " " + appointment.getProfessional().getSurname()
+                    )
+                    .build())
+            .collect(Collectors.toList());
     }
 
     public Appointment createAppointment(AppointmentRequest request) {
@@ -99,27 +130,28 @@ public class AppoinmentService {
         List<Appointment> appointments = appointmentRepository.findAll();
 
         return appointments.stream()
-            .sorted((a, b) -> {
-                try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    Date dateA = sdf.parse(a.getDate() + " " + a.getHourValue());
-                    Date dateB = sdf.parse(b.getDate() + " " + b.getHourValue());
-                    return dateA.compareTo(dateB);
-                } catch (Exception e) {
-                    return 0;
-                }
-            })
-            .map(data -> AppointmentResponse.builder()
-                    .id(data.getId())
-                    .name(data.getPatient().getName())
-                    .surname(data.getPatient().getSurname())
-                    .phone(data.getPatient().getPhone())
-                    .date(data.getDate())
-                    .professionalFullName(data.getProfessional().getName() + ' ' + data.getProfessional().getSurname())
-                    .hour(data.getHourValue())
-                    .state(data.getState())
-                    .build())
-            .collect(Collectors.toList());
+                .sorted((a, b) -> {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        Date dateA = sdf.parse(a.getDate() + " " + a.getHourValue());
+                        Date dateB = sdf.parse(b.getDate() + " " + b.getHourValue());
+                        return dateA.compareTo(dateB);
+                    } catch (Exception e) {
+                        return 0;
+                    }
+                })
+                .map(data -> AppointmentResponse.builder()
+                        .id(data.getId())
+                        .name(data.getPatient().getName())
+                        .surname(data.getPatient().getSurname())
+                        .phone(data.getPatient().getPhone())
+                        .date(data.getDate())
+                        .professionalFullName(
+                                data.getProfessional().getName() + ' ' + data.getProfessional().getSurname())
+                        .hour(data.getHourValue())
+                        .state(data.getState())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public List<AppointmentResponse> getAppointmentsByProfessional(AppUser professional) {

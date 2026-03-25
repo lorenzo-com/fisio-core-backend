@@ -38,7 +38,7 @@ public class AppointmentController {
 
     @GetMapping
     public ResponseEntity<?> getUserAppointments(@AuthenticationPrincipal AppUser user) {
-        List<Appointment> appointments = appoinmentService.findByPatient(user);
+        List<AppointmentResponse> appointments = appoinmentService.findByPatient(user);
 
         return ResponseEntity.ok(appointments);
     }
@@ -76,7 +76,7 @@ public class AppointmentController {
 
     @GetMapping("/pending")
     public ResponseEntity<?> getUserPendingAppointments(@AuthenticationPrincipal AppUser user) {
-        List<Appointment> appointments = appoinmentService.findByPatientAndState(user, StatusAppointment.PENDIENTE);
+        List<AppointmentResponse> appointments = appoinmentService.findByPatientAndState(user, StatusAppointment.PENDIENTE);
 
         return ResponseEntity.ok(appointments);
     }
