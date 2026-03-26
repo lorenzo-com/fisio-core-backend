@@ -1,8 +1,5 @@
 package com.example.physiocore.demo.dto;
 
-import com.example.physiocore.demo.model.ClinicService;
-import com.example.physiocore.demo.model.StatusAppointment;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +25,8 @@ public class AppointmentResponse {
     private String phone;
     private String date;
     private String professionalFullName;
+    private String professionalId;
     private String hour;
-    private ClinicService service;
-    private StatusAppointment state;
+    private String service;
+    private String state;
 }

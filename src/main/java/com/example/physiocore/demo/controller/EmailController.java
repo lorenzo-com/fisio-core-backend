@@ -31,9 +31,6 @@ public class EmailController {
     @PostMapping("/request-cancel")
     public ResponseEntity<?> requestCancellation(@RequestBody BookClientRequestDto reservation) {
        
-    System.out.println(reservation.getName());
-    System.out.println(reservation.getUsername());
-    System.out.println(reservation.getPhone());
         emailService.sendEmail(
                 "fisiocorecontacto@gmail.com",
                 "Solicitud de cancelación - FisioCore",

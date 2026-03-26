@@ -39,8 +39,8 @@ public class AppoinmentService {
                                                 .phone(appointment.getPatient().getPhone())
                                                 .date(appointment.getDate())
                                                 .hour(appointment.getHourValue())
-                                                .service(appointment.getService())
-                                                .state(appointment.getState())
+                                                .service(appointment.getService().getLabel())
+                                                .state(appointment.getState().getLabel())
                                                 .professionalFullName(
                                                                 appointment.getProfessional().getName() + " "
                                                                                 + appointment.getProfessional()
@@ -66,8 +66,8 @@ public class AppoinmentService {
                                                 .phone(appointment.getPatient().getPhone())
                                                 .date(appointment.getDate())
                                                 .hour(appointment.getHourValue())
-                                                .service(appointment.getService())
-                                                .state(appointment.getState())
+                                                .service(appointment.getService().getLabel())
+                                                .state(appointment.getState().getLabel())
                                                 .professionalFullName(
                                                                 appointment.getProfessional().getName() + " "
                                                                                 + appointment.getProfessional()
@@ -119,8 +119,8 @@ public class AppoinmentService {
                                 .phone(updatedAppointment.getPatient().getPhone())
                                 .date(updatedAppointment.getDate())
                                 .hour(updatedAppointment.getHourValue())
-                                .service(updatedAppointment.getService())
-                                .state(updatedAppointment.getState())
+                                .service(updatedAppointment.getService().getLabel())
+                                .state(updatedAppointment.getState().getLabel())
                                 .build();
         }
 
@@ -135,10 +135,11 @@ public class AppoinmentService {
                                 .name(appointment.getPatient().getName())
                                 .surname(appointment.getPatient().getSurname())
                                 .phone(appointment.getPatient().getPhone())
+                                .professionalId(appointment.getProfessional().getId().toString())
                                 .date(appointment.getDate())
                                 .hour(appointment.getHourValue())
-                                .service(appointment.getService())
-                                .state(appointment.getState())
+                                .service(appointment.getService().getLabel())
+                                .state(appointment.getState().getLabel())
                                 .build();
         }
 
@@ -162,12 +163,12 @@ public class AppoinmentService {
                                                 .surname(data.getPatient().getSurname())
                                                 .phone(data.getPatient().getPhone())
                                                 .date(data.getDate())
-                                                .service(data.getService())
+                                                .service(data.getService().getLabel())
                                                 .professionalFullName(
                                                                 data.getProfessional().getName() + ' '
                                                                                 + data.getProfessional().getSurname())
                                                 .hour(data.getHourValue())
-                                                .state(data.getState())
+                                                .state(data.getState().getLabel())
                                                 .build())
                                 .collect(Collectors.toList());
         }
@@ -183,7 +184,7 @@ public class AppoinmentService {
                                         .phone(data.getPatient().getPhone())
                                         .date(data.getDate())
                                         .hour(data.getHourValue())
-                                        .state(data.getState())
+                                        .state(data.getState().getLabel())
                                         .build();
                 }).collect(Collectors.toList());
         }
