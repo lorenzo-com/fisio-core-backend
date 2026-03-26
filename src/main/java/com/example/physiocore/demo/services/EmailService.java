@@ -8,6 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.example.physiocore.demo.dto.BookClientRequestDto;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -16,7 +18,87 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String to, String subject, String body) {
+    public void sendEmail(String to, String subject, String titulo, BookClientRequestDto reservation) {
+        String body = """
+                <html>
+                <body style="font-family: Arial, sans-serif; background-color:#2741a1; padding:20px;">
+
+                    <div style="
+                        max-width:600px;
+                        margin:auto;
+                        background:white;
+                        border-radius:12px;
+                        box-shadow:0 5px 15px rgba(0,0,0,0.08);
+                        overflow:hidden;
+                    ">
+
+                        <div style="
+                            background:#FAFAFA;
+                            padding:25px;
+                            text-align:center;
+                        ">
+                            <img src="cid:logo" style="width:140px; margin-bottom:10px;">
+
+                            <h2 style="
+                                color:#00226b;
+                                margin:0;
+                                font-weight:600;
+                            ">
+                                %s
+                            </h2>
+                        </div>
+
+                        <div style="padding:30px;">
+
+                            <h3 style="
+                                color:#0A6ED1;
+                                border-bottom:2px solid #eef5ff;
+                                padding-bottom:8px;
+                            ">
+                                Datos del cliente
+                            </h3>
+
+                            <p><b>Nombre:</b> %s</p>
+                            <p><b>Email:</b> %s</p>
+                            <p><b>Teléfono:</b> %s</p>
+
+                            <h3 style="
+                                color:#0A6ED1;
+                                border-bottom:2px solid #eef5ff;
+                                padding-bottom:8px;
+                                margin-top:25px;
+                            ">
+                                Información de la reserva
+                            </h3>
+
+                            <p><b>Fecha:</b> %s</p>
+                            <p><b>Hora:</b> %s</p>
+                            <p><b>Servicio:</b> %s</p>
+
+                        </div>
+
+                        <div style="
+                            background:#f0f6ff;
+                            padding:20px;
+                            text-align:center;
+                            font-size:13px;
+                            color:#0A6ED1;
+                        ">
+                            Sistema automático de reservas FisioCore
+                        </div>
+
+                    </div>
+
+                </body>
+                </html>
+                """.formatted(
+                titulo,
+                reservation.getName(),
+                reservation.getUsername(),
+                reservation.getPhone(),
+                reservation.getDate(),
+                reservation.getHour(),
+                reservation.getService());
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");

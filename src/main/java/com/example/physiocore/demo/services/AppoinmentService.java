@@ -162,6 +162,7 @@ public class AppoinmentService {
                                                 .surname(data.getPatient().getSurname())
                                                 .phone(data.getPatient().getPhone())
                                                 .date(data.getDate())
+                                                .service(data.getService())
                                                 .professionalFullName(
                                                                 data.getProfessional().getName() + ' '
                                                                                 + data.getProfessional().getSurname())
