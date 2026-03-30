@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BookClientRequestDto {
+public class QuestionClientRequestDto {
     private String name;
+    private String surname;
     private String username;
     private String phone;
-    private String date;
-    private String hour;
+    private String comment;
 }

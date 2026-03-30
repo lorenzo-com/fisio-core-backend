@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.example.physiocore.demo.dto.BookClientRequestDto;
+import com.example.physiocore.demo.dto.QuestionClientRequestDto;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -18,94 +19,140 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendEmail(String to, String subject, String titulo, BookClientRequestDto reservation) {
+    public void sendEmail(String to, String subject, String titulo, BookClientRequestDto reservation,
+            QuestionClientRequestDto question) {
+        String reservationBlock = "";
+        String questionBlock = "";
+
+        if (reservation != null) {
+
+            reservationBlock = """
+                        <h3 style="
+                            color:#0A6ED1;
+                            border-bottom:2px solid #eef5ff;
+                            padding-bottom:8px;
+                            margin-top:25px;
+                        ">
+                            Información de la reserva
+                        </h3>
+
+                        <p><b>Fecha:</b> %s</p>
+                        <p><b>Hora:</b> %s</p>
+                    """.formatted(
+                    reservation.getDate(),
+                    reservation.getHour());
+
+        }
+
+        if (question != null) {
+
+            questionBlock = """
+                        <h3 style="
+                            color:#0A6ED1;
+                            border-bottom:2px solid #eef5ff;
+                            padding-bottom:8px;
+                            margin-top:25px;
+                        ">
+                            Consulta
+                        </h3>
+
+                        <p style="
+                            background:#f5f8ff;
+                            padding:15px;
+                            border-radius:8px;
+                        ">
+                            %s
+                        </p>
+                    """.formatted(question.getComment());
+
+        }
+
+        String name = reservation != null ? reservation.getName() : question.getName() + " " + question.getSurname();
+
+        String email = reservation != null ? reservation.getUsername() : question.getUsername();
+
+        String phone = reservation != null ? reservation.getPhone() : question.getPhone();
+
         String body = """
                 <html>
                 <body style="font-family: Arial, sans-serif; background-color:#2741a1; padding:20px;">
 
-                    <div style="
-                        max-width:600px;
-                        margin:auto;
-                        background:white;
-                        border-radius:12px;
-                        box-shadow:0 5px 15px rgba(0,0,0,0.08);
-                        overflow:hidden;
-                    ">
+                <div style="
+                    max-width:600px;
+                    margin:auto;
+                    background:white;
+                    border-radius:12px;
+                    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+                    overflow:hidden;
+                ">
 
-                        <div style="
-                            background:#FAFAFA;
-                            padding:25px;
-                            text-align:center;
-                        ">
-                            <img src="cid:logo" style="width:140px; margin-bottom:10px;">
+                <div style="
+                    background:#FAFAFA;
+                    padding:25px;
+                    text-align:center;
+                ">
 
-                            <h2 style="
-                                color:#00226b;
-                                margin:0;
-                                font-weight:600;
-                            ">
-                                %s
-                            </h2>
-                        </div>
+                <img src="cid:logo" style="width:140px;">
 
-                        <div style="padding:30px;">
+                <h2 style="color:#00226b;">
+                    %s
+                </h2>
 
-                            <h3 style="
-                                color:#0A6ED1;
-                                border-bottom:2px solid #eef5ff;
-                                padding-bottom:8px;
-                            ">
-                                Datos del cliente
-                            </h3>
+                </div>
 
-                            <p><b>Nombre:</b> %s</p>
-                            <p><b>Email:</b> %s</p>
-                            <p><b>Teléfono:</b> %s</p>
+                <div style="padding:30px;">
 
-                            <h3 style="
-                                color:#0A6ED1;
-                                border-bottom:2px solid #eef5ff;
-                                padding-bottom:8px;
-                                margin-top:25px;
-                            ">
-                                Información de la reserva
-                            </h3>
+                <h3 style="
+                    color:#0A6ED1;
+                    border-bottom:2px solid #eef5ff;
+                    padding-bottom:8px;
+                ">
+                    Datos del cliente
+                </h3>
 
-                            <p><b>Fecha:</b> %s</p>
-                            <p><b>Hora:</b> %s</p>
-                            <p><b>Servicio:</b> %s</p>
+                <p><b>Nombre:</b> %s</p>
+                <p><b>Email:</b> %s</p>
+                <p><b>Teléfono:</b> %s</p>
 
-                        </div>
+                %s
 
-                        <div style="
-                            background:#f0f6ff;
-                            padding:20px;
-                            text-align:center;
-                            font-size:13px;
-                            color:#0A6ED1;
-                        ">
-                            Sistema automático de reservas FisioCore
-                        </div>
+                %s
 
-                    </div>
+                </div>
+
+                <div style="
+                    background:#f0f6ff;
+                    padding:20px;
+                    text-align:center;
+                    font-size:13px;
+                    color:#0A6ED1;
+                ">
+                Sistema automático FisioCore
+                </div>
+
+                </div>
 
                 </body>
                 </html>
                 """.formatted(
                 titulo,
-                reservation.getName(),
-                reservation.getUsername(),
-                reservation.getPhone(),
-                reservation.getDate(),
-                reservation.getHour(),
-                reservation.getService());
+                name,
+                email,
+                phone,
+                reservationBlock,
+                questionBlock);
+
         try {
+
             MimeMessage message = mailSender.createMimeMessage();
+
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(body, true); // El true indica que es HTML
+            helper.setText(body, true);
+
+            helper.setReplyTo(email);
 
             FileSystemResource file = new FileSystemResource(
                     new File("src/main/resources/static/FisioCore-vertical.png"));
@@ -113,8 +160,11 @@ public class EmailService {
             helper.addInline("logo", file);
 
             mailSender.send(message);
+
         } catch (MessagingException e) {
+
             throw new RuntimeException("Error al enviar el email", e);
+
         }
     }
 }

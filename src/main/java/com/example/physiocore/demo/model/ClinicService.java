@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum ClinicService {
-    FISIOTERAPIA_DEPORTIVA("Fisioterapia deportiva"),
+    FISIOTERAPIA_DEPORTIVA("Fisioterapia Deportiva"),
     REHABILITACION("Rehabilitación"),
-    MASAJE_TERAPEUTICO("Masaje terapéutico"),
-    ESCUELA_ESPALDA("Escuela de espalda");
+    MASAJE_TERAPEUTICO("Masaje Terapéutico"),
+    ESCUELA_ESPALDA("Escuela de Espalda");
 
     private final String label;
 
