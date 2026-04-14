@@ -32,7 +32,7 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ADMIN y PATIENT (TODO: Validar si es admin o paciente)
+    // ADMIN y PATIENT
     @PutMapping("/client/update/{id}")
     public ResponseEntity<AppUser> updateClient(@PathVariable Long id, @RequestBody UserUpdateDTO clientData) {
         AppUser updatedClient = userService.updateClient(id, clientData);
