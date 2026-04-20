@@ -36,7 +36,7 @@ public class DataSeeder implements CommandLineRunner {
             admin.setDni("X00000");
             admin.setName("Alex");
             admin.setSurname("Calafat");
-            admin.setBirthDate(java.time.LocalDate.now());
+            admin.setBirthDate(LocalDate.parse("1974-01-15"));
             admin.setAddress("C/ Alex 1");
             admin.setUsername("alex@admin.com");
             admin.setPhone("123456789");
@@ -49,7 +49,7 @@ public class DataSeeder implements CommandLineRunner {
             employee.setDni("X00001");
             employee.setName("Maria");
             employee.setSurname("Garcia");
-            employee.setBirthDate(java.time.LocalDate.now());
+            employee.setBirthDate(LocalDate.parse("1978-08-20"));
             employee.setAddress("C/ Maria 2");
             employee.setUsername("maria@employee.com");
             employee.setPhone("123456789");
@@ -61,7 +61,7 @@ public class DataSeeder implements CommandLineRunner {
             employee2.setDni("X00002");
             employee2.setName("Jose");
             employee2.setSurname("Hernandez");
-            employee2.setBirthDate(java.time.LocalDate.now());
+            employee2.setBirthDate(LocalDate.parse("1983-09-14"));
             employee2.setAddress("C/ Jose 3");
             employee2.setUsername("jose@employee.com");
             employee2.setPhone("123456789");
@@ -74,7 +74,7 @@ public class DataSeeder implements CommandLineRunner {
             client.setDni("Y00001");
             client.setName("John");
             client.setSurname("Doe");
-            client.setBirthDate(java.time.LocalDate.now());
+            client.setBirthDate(LocalDate.parse("2000-12-16"));
             client.setAddress("C/ John 1");
             client.setUsername("john@client.com");
             client.setPhone("987654321");
@@ -85,7 +85,7 @@ public class DataSeeder implements CommandLineRunner {
             client2.setDni("Y00002");
             client2.setName("Sarah");
             client2.setSurname("Smith");
-            client2.setBirthDate(java.time.LocalDate.now());
+            client2.setBirthDate(LocalDate.parse("2006-10-09"));
             client2.setAddress("C/ Sarah 2");
             client2.setUsername("sarah@client.com");
             client2.setPhone("987654321");
@@ -107,14 +107,14 @@ public class DataSeeder implements CommandLineRunner {
 
             // Creamos citas para esos clientes para ver paginación y filtro para profesionales
             Appointment appointment1 = new Appointment();
-            appointment1.setDate(LocalDate.now().toString());
+            appointment1.setDate("2026-06-15");
             appointment1.setHourValue("11:00");
             appointment1.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
             appointment1.setPatient(john);
             appointment1.setProfessional(maria);
 
             Appointment appointment2 = new Appointment();
-            appointment2.setDate(LocalDate.now().toString());
+            appointment2.setDate("2026-06-12");
             appointment2.setHourValue("12:00");
             appointment2.setService(ClinicService.REHABILITACION);
             appointment2.setState(StatusAppointment.CANCELADA);
@@ -122,7 +122,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment2.setProfessional(maria);
 
             Appointment appointment3 = new Appointment();
-            appointment3.setDate(LocalDate.now().toString());
+            appointment3.setDate("2026-05-04");
             appointment3.setHourValue("13:00");
             appointment3.setService(ClinicService.MASAJE_TERAPEUTICO);
             appointment3.setState(StatusAppointment.COMPLETADA);
@@ -130,7 +130,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment3.setProfessional(maria);
 
             Appointment appointment4 = new Appointment();
-            appointment4.setDate(LocalDate.now().toString());
+            appointment4.setDate("2026-05-11");
             appointment4.setHourValue("14:00");
             appointment4.setService(ClinicService.ESCUELA_ESPALDA);
             appointment4.setState(StatusAppointment.AUSENTE);
@@ -138,14 +138,14 @@ public class DataSeeder implements CommandLineRunner {
             appointment4.setProfessional(maria);
 
             Appointment appointment5 = new Appointment();
-            appointment5.setDate(LocalDate.now().toString());
+            appointment5.setDate("2026-06-17");
             appointment5.setHourValue("15:00");
             appointment5.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
             appointment5.setPatient(john);
             appointment5.setProfessional(maria);
 
             Appointment appointment6 = new Appointment();
-            appointment6.setDate(LocalDate.now().toString());
+            appointment6.setDate("2026-06-19");
             appointment6.setHourValue("16:00");
             appointment6.setService(ClinicService.REHABILITACION);
             appointment6.setState(StatusAppointment.CANCELADA);
@@ -153,7 +153,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment6.setProfessional(maria);
 
             Appointment appointment7 = new Appointment();
-            appointment7.setDate(LocalDate.now().toString());
+            appointment7.setDate("2026-05-06");
             appointment7.setHourValue("17:00");
             appointment7.setService(ClinicService.MASAJE_TERAPEUTICO);
             appointment7.setState(StatusAppointment.COMPLETADA);
@@ -161,7 +161,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment7.setProfessional(maria);
 
             Appointment appointment8 = new Appointment();
-            appointment8.setDate(LocalDate.now().toString());
+            appointment8.setDate("2026-05-13");
             appointment8.setHourValue("18:00");
             appointment8.setService(ClinicService.ESCUELA_ESPALDA);
             appointment8.setState(StatusAppointment.AUSENTE);
@@ -169,14 +169,14 @@ public class DataSeeder implements CommandLineRunner {
             appointment8.setProfessional(maria);
 
             Appointment appointment9 = new Appointment();
-            appointment9.setDate(LocalDate.now().toString());
+            appointment9.setDate("2026-06-22");
             appointment9.setHourValue("19:00");
             appointment9.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
             appointment9.setPatient(john);
             appointment9.setProfessional(maria);
 
             Appointment appointment10 = new Appointment();
-            appointment10.setDate(LocalDate.now().toString());
+            appointment10.setDate("2026-06-12");
             appointment10.setHourValue("11:00");
             appointment10.setService(ClinicService.REHABILITACION);
             appointment10.setState(StatusAppointment.CANCELADA);
@@ -184,7 +184,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment10.setProfessional(maria);
 
             Appointment appointment11 = new Appointment();
-            appointment11.setDate(LocalDate.now().toString());
+            appointment11.setDate("2026-05-08");
             appointment11.setHourValue("12:00");
             appointment11.setService(ClinicService.MASAJE_TERAPEUTICO);
             appointment11.setState(StatusAppointment.COMPLETADA);
@@ -192,7 +192,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment11.setProfessional(maria);
 
             Appointment appointment12 = new Appointment();
-            appointment12.setDate(LocalDate.now().toString());
+            appointment12.setDate("2026-05-15");
             appointment12.setHourValue("13:00");
             appointment12.setService(ClinicService.ESCUELA_ESPALDA);
             appointment12.setState(StatusAppointment.AUSENTE);
@@ -200,14 +200,14 @@ public class DataSeeder implements CommandLineRunner {
             appointment12.setProfessional(maria);
 
             Appointment appointment13 = new Appointment();
-            appointment13.setDate(LocalDate.now().toString());
+            appointment13.setDate("2026-06-16");
             appointment13.setHourValue("11:00");
             appointment13.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
             appointment13.setPatient(sarah);
             appointment13.setProfessional(jose);
 
             Appointment appointment14 = new Appointment();
-            appointment14.setDate(LocalDate.now().toString());
+            appointment14.setDate("2026-05-12");
             appointment14.setHourValue("12:00");
             appointment14.setService(ClinicService.REHABILITACION);
             appointment14.setState(StatusAppointment.CANCELADA);            
@@ -215,7 +215,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment14.setProfessional(jose);
 
             Appointment appointment15 = new Appointment();
-            appointment15.setDate(LocalDate.now().toString());
+            appointment15.setDate("2026-05-19");
             appointment15.setHourValue("13:00");
             appointment15.setService(ClinicService.MASAJE_TERAPEUTICO);
             appointment15.setState(StatusAppointment.COMPLETADA);
@@ -223,7 +223,7 @@ public class DataSeeder implements CommandLineRunner {
             appointment15.setProfessional(jose);
 
             Appointment appointment16 = new Appointment();
-            appointment16.setDate(LocalDate.now().toString());
+            appointment16.setDate("2026-05-20");
             appointment16.setHourValue("14:00");
             appointment16.setService(ClinicService.ESCUELA_ESPALDA);
             appointment16.setState(StatusAppointment.AUSENTE);
@@ -231,14 +231,14 @@ public class DataSeeder implements CommandLineRunner {
             appointment16.setProfessional(jose);
 
             Appointment appointment17 = new Appointment();
-            appointment17.setDate(LocalDate.now().toString());
+            appointment17.setDate("2026-06-18");
             appointment17.setHourValue("15:00");
             appointment17.setService(ClinicService.FISIOTERAPIA_DEPORTIVA);
             appointment17.setPatient(sarah);
             appointment17.setProfessional(jose);
 
             Appointment appointment18 = new Appointment();
-            appointment18.setDate(LocalDate.now().toString());
+            appointment18.setDate("2026-05-14");
             appointment18.setHourValue("16:00");
             appointment18.setService(ClinicService.MASAJE_TERAPEUTICO);
             appointment18.setState(StatusAppointment.CANCELADA);
