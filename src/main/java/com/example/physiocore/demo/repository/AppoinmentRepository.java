@@ -1,5 +1,6 @@
 package com.example.physiocore.demo.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,7 @@ public interface AppoinmentRepository extends JpaRepository<Appointment, Long> {
     List<Appointment> findByPatientAndState(AppUser patient, StatusAppointment state);
 
     List<Appointment> findByProfessional(AppUser professional);
+
+    @Query("SELECT a FROM Appointment a WHERE a.date = CAST(:date AS string) ORDER BY a.hourValue ASC")
+    List<Appointment> findByDateCustom(@Param("date") LocalDate date);
 }

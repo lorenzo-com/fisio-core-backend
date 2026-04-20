@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.physiocore.demo.dto.AppointmentDailyDTO;
 import com.example.physiocore.demo.dto.AppointmentRequest;
 import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.Appointment;
@@ -25,6 +26,18 @@ public class AppoinmentService {
         private AppoinmentRepository appointmentRepository;
         @Autowired
         private UserRepository clientRepository;
+
+        public List<AppointmentDailyDTO> getDailyAgenda(LocalDate date) {
+                return appointmentRepository.findByDateCustom(date).stream()
+                                .map(app -> new AppointmentDailyDTO(
+                                                app.getHourValue(),
+                                                app.getProfessional().getName() + " "
+                                                                + app.getProfessional().getSurname(),
+                                                app.getPatient().getName() + " " + app.getPatient().getSurname(),
+                                                app.getService().getLabel(),
+                                                app.getState().getLabel()))
+                                .collect(Collectors.toList());
+        }
 
         public List<AppointmentResponse> findByPatient(AppUser user) {
                 List<Appointment> appointments = appointmentRepository.findByPatient(user);
@@ -73,7 +86,7 @@ public class AppoinmentService {
                                                                                 + appointment.getProfessional()
                                                                                                 .getSurname())
                                                 .build())
-                                                .sorted(Comparator
+                                .sorted(Comparator
                                                 .comparing((AppointmentResponse response) -> LocalDate
                                                                 .parse(response.getDate()))
                                                 .reversed()

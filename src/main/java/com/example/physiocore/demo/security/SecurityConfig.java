@@ -58,7 +58,7 @@ public class SecurityConfig {
 						.requestMatchers(HttpMethod.PUT, "/appointment/{id}").hasAnyRole("ADMIN", "PROFESSIONAL")
 						.requestMatchers(HttpMethod.PUT, "/client/update/{id}").hasAnyRole("ADMIN", "PATIENT")
 						.requestMatchers(HttpMethod.DELETE, "/client/delete/{id}").hasRole("ADMIN")
-						.requestMatchers("/professionals", "/professionals/**", "/administrators/**").hasRole("ADMIN")
+						.requestMatchers("/professionals", "/professionals/**", "/administrators/**", "/appointment/daily").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				// Añadimos un filtro encargado de coger el token y si es válido
 				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
