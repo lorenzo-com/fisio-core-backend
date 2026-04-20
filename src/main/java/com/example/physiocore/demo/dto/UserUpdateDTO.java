@@ -17,4 +17,5 @@ public class UserUpdateDTO {
     private String address;
     private String phone;
     private LocalDate birthDate;
+    private String newPassword; // (Opcional por defecto) por si quiere cambiar su contraseña
 }

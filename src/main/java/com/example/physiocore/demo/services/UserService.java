@@ -33,6 +33,9 @@ public class UserService {
         clientToUpdate.setAddress(clientData.getAddress());
         clientToUpdate.setPhone(clientData.getPhone());
         clientToUpdate.setBirthDate(clientData.getBirthDate());
+        if (clientData.getNewPassword() != null && !clientData.getNewPassword().isBlank()) {
+            clientToUpdate.setPassword(passwordEncoder.encode(clientData.getNewPassword()));
+        }
 
         return userRepository.save(clientToUpdate);
     }
