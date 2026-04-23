@@ -82,12 +82,6 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    // PROFESSIONAL
-    @GetMapping("path")
-    public String getAppointments(@RequestParam String param) {
-        return new String();
-    }
-
     // ADMIN
     @GetMapping("/daily")
     public List<AppointmentDailyDTO> getDailyAgenda(
@@ -95,5 +89,14 @@ public class AppointmentController {
 
         LocalDate parsedDate = LocalDate.parse(date);
         return appoinmentService.getDailyAgenda(parsedDate);
+    }
+
+    // PROFESSIONAL
+    @GetMapping("/daily/professional")
+    public List<AppointmentDailyDTO> getDailyAgendaByProfessional(
+            @RequestParam String date, @AuthenticationPrincipal AppUser user) {
+
+        LocalDate parsedDate = LocalDate.parse(date);
+        return appoinmentService.getDailyAgendaByProfessional(parsedDate, user.getId());
     }
 }

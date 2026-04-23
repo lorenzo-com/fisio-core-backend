@@ -1,8 +1,5 @@
 package com.example.physiocore.demo.dto;
 
-import com.example.physiocore.demo.model.ClinicService;
-import com.example.physiocore.demo.model.StatusAppointment;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

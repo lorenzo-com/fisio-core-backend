@@ -39,6 +39,19 @@ public class AppoinmentService {
                                 .collect(Collectors.toList());
         }
 
+        public List<AppointmentDailyDTO> getDailyAgendaByProfessional(LocalDate date, Long professionalId) {
+                return appointmentRepository.findDailyAgendaByProfessional(date, professionalId)
+                .stream()
+                .map(app -> new AppointmentDailyDTO(
+                        app.getHourValue(),
+                        app.getProfessional().getName() + " " + app.getProfessional().getSurname(),
+                        app.getPatient().getName() + " " + app.getPatient().getSurname(),
+                        app.getService().getLabel(),
+                        app.getState().getLabel()
+                ))
+                .toList();
+        }
+
         public List<AppointmentResponse> findByPatient(AppUser user) {
                 List<Appointment> appointments = appointmentRepository.findByPatient(user);
 

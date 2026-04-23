@@ -22,4 +22,15 @@ public interface AppoinmentRepository extends JpaRepository<Appointment, Long> {
 
     @Query("SELECT a FROM Appointment a WHERE a.date = CAST(:date AS string) ORDER BY a.hourValue ASC")
     List<Appointment> findByDateCustom(@Param("date") LocalDate date);
+
+    @Query("""
+        SELECT a FROM Appointment a
+        WHERE a.date = CAST(:date AS string)
+        AND a.professional.id = :professionalId
+        ORDER BY a.hourValue ASC
+    """)
+    List<Appointment> findDailyAgendaByProfessional(
+            @Param("date") LocalDate date,
+            @Param("professionalId") Long professionalId
+    );
 }
