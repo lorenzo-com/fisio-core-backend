@@ -15,6 +15,7 @@ import com.example.physiocore.demo.dto.AppointmentRequest;
 import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.Appointment;
+import com.example.physiocore.demo.model.ClinicService;
 import com.example.physiocore.demo.model.StatusAppointment;
 import com.example.physiocore.demo.model.UserRole;
 import com.example.physiocore.demo.services.AppoinmentService;
@@ -80,6 +81,21 @@ public class AppointmentController {
                 StatusAppointment.PENDIENTE);
 
         return ResponseEntity.ok(appointments);
+    }
+
+    @GetMapping("/search")
+    public List<AppointmentResponse> searchAppointments(
+            @RequestParam(required = false) String date,
+            @RequestParam(required = false) Long professionalId,
+            @RequestParam(required = false) String patientName,
+            @RequestParam(required = false) StatusAppointment state,
+            @RequestParam(required = false) ClinicService service) {
+        return appoinmentService.searchAppointments(
+                date != null ? LocalDate.parse(date) : null,
+                professionalId,
+                patientName,
+                state,
+                service);
     }
 
     // ADMIN

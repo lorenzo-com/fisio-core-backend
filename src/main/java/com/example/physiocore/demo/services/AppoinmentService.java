@@ -15,6 +15,7 @@ import com.example.physiocore.demo.dto.AppointmentDailyDTO;
 import com.example.physiocore.demo.dto.AppointmentRequest;
 import com.example.physiocore.demo.dto.AppointmentResponse;
 import com.example.physiocore.demo.model.Appointment;
+import com.example.physiocore.demo.model.ClinicService;
 import com.example.physiocore.demo.model.StatusAppointment;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.repository.AppoinmentRepository;
@@ -26,6 +27,31 @@ public class AppoinmentService {
         private AppoinmentRepository appointmentRepository;
         @Autowired
         private UserRepository clientRepository;
+
+        public List<AppointmentResponse> searchAppointments(
+                        LocalDate date,
+                        Long professionalId,
+                        String patientName,
+                        StatusAppointment state,
+                        ClinicService service) {
+                return appointmentRepository.searchAppointments(date, professionalId, patientName, state, service)
+                                .stream()
+                                .map(app -> new AppointmentResponse(
+                                                app.getId(),
+                                                app.getPatient().getId(),
+                                                app.getPatient().getName(),
+                                                app.getPatient().getSurname(),
+                                                app.getPatient().getUsername(),
+                                                app.getPatient().getPhone(),
+                                                app.getDate().toString(),
+                                                app.getProfessional().getName() + " " +
+                                                                app.getProfessional().getSurname(),
+                                                app.getProfessional().getId().toString(),
+                                                app.getHourValue(),
+                                                app.getService().getLabel(),
+                                                app.getState().getLabel()))
+                                .toList();
+        }
 
         public List<AppointmentDailyDTO> getDailyAgenda(LocalDate date) {
                 return appointmentRepository.findByDateCustom(date).stream()
@@ -41,15 +67,15 @@ public class AppoinmentService {
 
         public List<AppointmentDailyDTO> getDailyAgendaByProfessional(LocalDate date, Long professionalId) {
                 return appointmentRepository.findDailyAgendaByProfessional(date, professionalId)
-                .stream()
-                .map(app -> new AppointmentDailyDTO(
-                        app.getHourValue(),
-                        app.getProfessional().getName() + " " + app.getProfessional().getSurname(),
-                        app.getPatient().getName() + " " + app.getPatient().getSurname(),
-                        app.getService().getLabel(),
-                        app.getState().getLabel()
-                ))
-                .toList();
+                                .stream()
+                                .map(app -> new AppointmentDailyDTO(
+                                                app.getHourValue(),
+                                                app.getProfessional().getName() + " "
+                                                                + app.getProfessional().getSurname(),
+                                                app.getPatient().getName() + " " + app.getPatient().getSurname(),
+                                                app.getService().getLabel(),
+                                                app.getState().getLabel()))
+                                .toList();
         }
 
         public List<AppointmentResponse> findByPatient(AppUser user) {
@@ -210,6 +236,7 @@ public class AppoinmentService {
                                         .phone(data.getPatient().getPhone())
                                         .date(data.getDate())
                                         .hour(data.getHourValue())
+                                        .service(data.getService().getLabel())
                                         .state(data.getState().getLabel())
                                         .build();
                 }).collect(Collectors.toList());
