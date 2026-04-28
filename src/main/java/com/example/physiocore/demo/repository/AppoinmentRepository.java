@@ -43,7 +43,7 @@ public interface AppoinmentRepository extends JpaRepository<Appointment, Long> {
                              SELECT a FROM Appointment a
                              JOIN FETCH a.patient
                              JOIN FETCH a.professional
-                             WHERE (:date IS NULL OR a.date = :date)
+                             WHERE (:date IS NULL OR CAST(a.date AS date) = :date)
                              AND (:professionalId IS NULL OR a.professional.id = :professionalId)
                              AND (:state IS NULL OR a.state = :state)
                              AND (:service IS NULL OR a.service = :service)
