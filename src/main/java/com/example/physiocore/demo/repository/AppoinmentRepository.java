@@ -20,6 +20,8 @@ public interface AppoinmentRepository extends JpaRepository<Appointment, Long> {
 
         List<Appointment> findByPatientAndState(AppUser patient, StatusAppointment state);
 
+        void deleteByPatientId(Long patientId);
+
         List<Appointment> findByProfessional(AppUser professional);
 
         @Query("SELECT a FROM Appointment a WHERE a.date = CAST(:date AS string) ORDER BY a.hourValue ASC")

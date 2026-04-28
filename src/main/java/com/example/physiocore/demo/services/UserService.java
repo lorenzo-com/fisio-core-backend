@@ -11,6 +11,7 @@ import com.example.physiocore.demo.dto.UserDto;
 import com.example.physiocore.demo.dto.UserUpdateDTO;
 import com.example.physiocore.demo.model.AppUser;
 import com.example.physiocore.demo.model.UserRole;
+import com.example.physiocore.demo.repository.AppoinmentRepository;
 import com.example.physiocore.demo.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -21,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AppoinmentRepository appointmentRepository;
     private final PasswordEncoder passwordEncoder;
 
     public AppUser updateClient(Long id, UserUpdateDTO clientData) {
@@ -128,10 +131,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteClient(Long id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("El cliente con id " + id + " no existe.");
         }
+        appointmentRepository.deleteByPatientId(id);
         userRepository.deleteById(id);
     }
 }
