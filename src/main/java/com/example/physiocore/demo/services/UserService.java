@@ -57,6 +57,15 @@ public class UserService {
     }
 
     @Transactional
+    public void deleteProfessional(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("Profesional no encontrado");
+        }
+        appointmentRepository.deleteByProfessionalId(id);
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
     public AppUser updateProfessional(Long id, AppUser updateProfessional) {
 
         AppUser user = userRepository.findById(id)

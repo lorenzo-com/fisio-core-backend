@@ -68,6 +68,14 @@ public class UserController {
                 userService.updateProfessional(id, professional));
     }
 
+    @DeleteMapping("/professionals/delete/{id}")
+    public ResponseEntity<?> deleteProfessional(@PathVariable Long id) {
+
+        userService.deleteProfessional(id);
+
+        return ResponseEntity.ok(Map.of("message", "Profesional eliminado correctamente"));
+    }
+
     @GetMapping("/professionals/{id}")
     public ResponseEntity<?> getProfessionalById(@PathVariable Long id) {
 
