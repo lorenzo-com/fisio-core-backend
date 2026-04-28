@@ -13,6 +13,8 @@ import com.example.physiocore.demo.model.UserRole;
 
 @Repository
 public interface UserRepository extends JpaRepository<AppUser, Long> {
+    boolean existsByUsername(String username);
+    
     Optional<AppUser> findByUsername(@Param("value") String value);
 
     @Query("SELECT u FROM AppUser u JOIN u.roles r WHERE r = :role")

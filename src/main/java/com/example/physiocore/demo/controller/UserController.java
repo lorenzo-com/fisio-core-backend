@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 public class UserController {
@@ -49,6 +51,29 @@ public class UserController {
     @GetMapping("/professionals")
     public List<UserDto> getAllProfessionals() {
         return userService.getAllProfessionals();
+    }
+
+    @PostMapping("/professionals/new")
+    public ResponseEntity<AppUser> createProfessional(@RequestBody AppUser professional) {
+        AppUser newProfessional = userService.createProfessional(professional);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newProfessional);
+    }
+
+    @PutMapping("/professionals/update/{id}")
+    public ResponseEntity<AppUser> updateProfessional(
+            @PathVariable Long id,
+            @RequestBody AppUser professional) {
+
+        return ResponseEntity.ok(
+                userService.updateProfessional(id, professional));
+    }
+
+    @GetMapping("/professionals/{id}")
+    public ResponseEntity<?> getProfessionalById(@PathVariable Long id) {
+
+        return userService.getProfessionalById(id)
+                .map(professional -> ResponseEntity.ok(professional))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/professionals/{id}/estado")

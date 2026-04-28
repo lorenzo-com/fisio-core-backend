@@ -2,6 +2,7 @@ package com.example.physiocore.demo.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,53 @@ public class UserService {
     @Autowired
     private AppoinmentRepository appointmentRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public AppUser createProfessional(AppUser newProfessional) {
+
+        if (userRepository.existsByUsername(newProfessional.getUsername())) {
+            throw new RuntimeException("El usuario ya existe");
+        }
+
+        AppUser user = new AppUser();
+
+        user.setDni(newProfessional.getDni());
+        user.setName(newProfessional.getName());
+        user.setSurname(newProfessional.getSurname());
+        user.setUsername(newProfessional.getUsername());
+        user.setAddress(newProfessional.getAddress());
+        user.setPhone(newProfessional.getPhone());
+        user.setBirthDate(newProfessional.getBirthDate());
+
+        user.setPassword(passwordEncoder.encode(newProfessional.getPassword()));
+
+        user.setRoles(Set.of(UserRole.PROFESSIONAL));
+
+        return userRepository.save(user);
+    }
+
+    public Optional<AppUser> getProfessionalById(Long id) {
+
+        return userRepository.findById(id)
+                .filter(user -> user.getRoles().contains(UserRole.PROFESSIONAL));
+    }
+
+    @Transactional
+    public AppUser updateProfessional(Long id, AppUser updateProfessional) {
+
+        AppUser user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Profesional no encontrado"));
+
+        user.setDni(updateProfessional.getDni());
+        user.setName(updateProfessional.getName());
+        user.setSurname(updateProfessional.getSurname());
+        user.setUsername(updateProfessional.getUsername());
+        user.setAddress(updateProfessional.getAddress());
+        user.setPhone(updateProfessional.getPhone());
+        user.setBirthDate(updateProfessional.getBirthDate());
+        user.setActive(updateProfessional.getActive());
+
+        return userRepository.save(user);
+    }
 
     public AppUser updateClient(Long id, UserUpdateDTO clientData) {
         AppUser clientToUpdate = userRepository.findById(id)
