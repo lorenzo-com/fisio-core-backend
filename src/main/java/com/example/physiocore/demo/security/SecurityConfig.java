@@ -63,8 +63,9 @@ public class SecurityConfig {
 				// Añadimos un filtro encargado de coger el token y si es válido
 				.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
 				.headers(headers -> headers
-						.frameOptions(frameOptions -> frameOptions.disable()))
-				.csrf(csrf -> csrf.disable());
+						.frameOptions(frame -> frame.sameOrigin()))
+				.csrf(csrf -> csrf
+            .ignoringRequestMatchers("/h2-console/**"));
 
 		return http.build();
 	}
