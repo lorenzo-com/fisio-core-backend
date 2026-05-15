@@ -1,9 +1,7 @@
 package com.example.physiocore.demo.services;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -154,8 +152,7 @@ public class EmailService {
 
             helper.setReplyTo(email);
 
-            FileSystemResource file = new FileSystemResource(
-                    new File("src/main/resources/static/FisioCore-vertical.png"));
+            ClassPathResource file = new ClassPathResource("static/FisioCore-vertical.png");
 
             helper.addInline("logo", file);
 
